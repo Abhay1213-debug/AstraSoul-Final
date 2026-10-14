@@ -1,0 +1,76 @@
+/* Design tokens — palette extends the brief: ivory, champagne/antique gold, terracotta, sage, plum, espresso. */
+:root {
+  /* Core palette (brand brief, lightly refined) */
+  --ivory: #f9f4e6;
+  --champagne-pale: #f1e4c6;
+  --champagne: #d8b56d; /* muted champagne gold: accents + primary actions */
+  --gold: #b88a4c; /* antique gold: lines, borders, small ornaments */
+  --espresso: #2e2317; /* tuned to the hero photograph's cocoa shadows */
+  --earth: #5a4526;
+  --plum: #604651;
+  --sage: #a7ac91;
+  --terracotta: #c17d61;
+
+  /* Derived tints & inks (inks are darkened so text on light surfaces meets 4.5:1) */
+  --paper: #f3ead3; /* quiet section surface, a breath deeper than ivory */
+  --sand: #ebdcbb;
+  --sage-tint: #e5e7d8;
+  --sage-ink: #4d5438;
+  --terracotta-tint: #f2dccf;
+  --terracotta-ink: #874c32;
+  --gold-ink: #7a5a22;
+  --champagne-light: #e9d29e; /* small champagne text on plum (champagne itself is 4.3:1 there) */
+  --plum-deep: #3f2c35;
+  --espresso-soft: #4a382c;
+  --night: #1d150d; /* deepest shade, for gradients only */
+  --cocoa: #302516; /* sampled from the hero photograph's left edge */
+  --cocoa-warm: #41331d; /* sampled from the hero photograph's right edge */
+  --bronze: #7d5d31; /* muted bronze: bands and rules (5.8:1 with ivory) */
+  --bronze-light: #a9854d;
+
+  /* Semantic */
+  --bg: var(--ivory);
+  --surface: #fffcf5;
+  --text: var(--espresso);
+  --text-muted: #5b483c;
+  --line: rgb(48 34 25 / 0.14);
+  --line-strong: rgb(48 34 25 / 0.28);
+  --line-gold: rgb(184 138 76 / 0.5);
+  --focus: #1f5fbf;
+  --danger: #a1402b;
+  --danger-bg: #fbe9e3;
+  --success: #3f6b3a;
+
+  /* Type */
+  --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
+  --font-sans: 'Manrope Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --fs-caption: 0.8125rem;
+  --fs-body: clamp(1rem, 0.97rem + 0.12vw, 1.0625rem);
+  --fs-lede: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+  --fs-h4: clamp(1.15rem, 1.1rem + 0.2vw, 1.3rem);
+  --fs-h3: clamp(1.4rem, 1.25rem + 0.6vw, 1.85rem);
+  --fs-h2: clamp(2rem, 1.5rem + 2vw, 3.25rem);
+  --fs-h1: clamp(2.1rem, 1.5rem + 2.6vw, 3.9rem);
+  --fs-hero: clamp(2.7rem, 1.7rem + 4.6vw, 5.6rem);
+
+  /* Space & shape */
+  --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; --space-5: 1.5rem;
+  --space-6: 2rem; --space-7: 3rem; --space-8: 4.5rem; --space-9: 6.5rem;
+  --radius-sm: 6px; --radius: 10px; --radius-lg: 14px; --radius-arch: 999px 999px 14px 14px;
+  --shadow-sm: 0 1px 2px rgb(48 34 25 / 0.06), 0 4px 14px rgb(48 34 25 / 0.06);
+  --shadow: 0 2px 6px rgb(48 34 25 / 0.06), 0 24px 48px -12px rgb(48 34 25 / 0.22);
+  --container: 1200px;
+  --gutter: clamp(1.25rem, 5vw, 2.5rem);
+  --header-h: 76px;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  /* Film grain used on dark surfaces */
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 0.93  0 0 0 0 0.8  0 0 0 0.55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Per-service identity: each service sets these variables; tiles, arches and heroes read them. */
+.theme-numerology { --t-bg: var(--espresso); --t-ink: var(--ivory); --t-muted: #dccdb4; --t-accent: var(--champagne); --t-soft: var(--espresso-soft); }
+.theme-palmistry { --t-bg: var(--plum); --t-ink: var(--ivory); --t-muted: #e8d8d3; --t-accent: #ebbfa6; --t-soft: #74586a; }
+.theme-gemstone-guidance { --t-bg: var(--sage-tint); --t-ink: var(--espresso); --t-muted: #4a4638; --t-accent: var(--sage-ink); --t-soft: #d3d6c0; }
+.theme-color-therapy { --t-bg: var(--terracotta-tint); --t-ink: var(--espresso); --t-muted: #5a4034; --t-accent: var(--terracotta-ink); --t-soft: #e8c8b6; }
