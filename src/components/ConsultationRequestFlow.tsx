@@ -1,10 +1,15 @@
-import { Check, ClipboardCopy, Mail } from 'lucide-react'
+import { Check, ClipboardCopy, Mail, MessageCircle } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
-import { useSearchParams, Link } from 'react-router-dom'
+import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { formatPrice, getPrice } from '../config/pricing'
 import { siteConfig } from '../config/site'
 import { bookingStatusInfo, consultationModes, isModeId, modeById } from '../data/consultationModes'
 import { isServiceSlug, serviceBySlug, services } from '../data/services'
+import { useLoad } from '../hooks/useLoad'
+import { useAuth } from '../lib/auth'
+import { dataErrorMessage, useData, type DataErrorCode } from '../lib/data'
+import { formatMoney } from '../lib/format'
+import { whatsappUrl } from '../lib/contact'
 import { buildMailto, buildRequestSummary } from '../lib/requestSummary'
 import {
   CONCERN_MAX, emptyDraft, hasErrors, validateDetailsStep, validateModeStep, validateReviewStep, validateServiceStep,
@@ -20,13 +25,27 @@ const STEPS = ['Service', 'Your details', 'Consultation mode', 'Review'] as cons
 /**
  * Consultation request flow.
  *
- * HONESTY NOTE: there is no backend yet. This flow collects and validates a request in memory
- * (nothing is stored — not even in localStorage), then lets the customer send the prepared
- * summary themselves by email or copy it. It never reports a request as "submitted", "booked"
- * or "paid".
+ * TWO MODES, chosen by what is really available:
+ *  - ONLINE: accounts are switched on, the customer is logged in, and an approved consent version exists in the database. The request is
+ *    saved through the database (which checks everything again), and the customer is taken to the request page for the payment steps.
+ *  - PREPARED-BY-EMAIL (the default): collects and validates in memory (nothing stored, not even in localStorage), then lets the
+ *    customer send the prepared summary themselves by email or copy it. It never reports a request as "submitted", "booked" or "paid".
  */
 export function ConsultationRequestFlow() {
   const [params] = useSearchParams()
+  const navigate = useNavigate()
+  const { state: auth } = useAuth()
+  const { service: data } = useData()
+  const signedIn = auth.status === 'signed_in'
+  const consentLoad = useLoad(data && signedIn ? () => data.getActiveConsentVersion() : null, [data, signedIn])
+  const profileLoad = useLoad(data && signedIn ? () => data.getMyProfile() : null, [data, signedIn])
+  const pricesLoad = useLoad(data ? () => data.listPrices() : null, [data])
+  const consentVersion = consentLoad.state.status === 'done' ? consentLoad.state.data : null
+  const profile = profileLoad.state.status === 'done' ? profileLoad.state.data : null
+  const online = Boolean(data && signedIn && consentVersion && profile)
+  const [submitFailure, setSubmitFailure] = useState<DataErrorCode | null>(null)
+  const [submitting, setSubmitting] = useState(false)
+  const [createdId, setCreatedId] = useState<string | null>(null)
   const initialService = params.get('service') ?? ''
   const initialMode = params.get('mode') ?? ''
 
@@ -45,6 +64,22 @@ export function ConsultationRequestFlow() {
 
   const service = serviceBySlug(draft.service)
   const mode = modeById(draft.mode)
+
+  // In online mode the details come from the customer's profile (they are not asked again).
+  useEffect(() => {
+    if (!online || !profile) return
+    setDraft((d) => ({
+      ...d,
+      fullName: profile.fullName,
+      email: profile.email || (auth.status === 'signed_in' ? auth.user.email : ''),
+      phone: profile.phone,
+      dateOfBirth: d.dateOfBirth || profile.dateOfBirth,
+      preferredLanguage: d.preferredLanguage || profile.preferredLanguage,
+    }))
+  }, [online, profile, auth])
+
+  const priceMinor = (slug: string, m: string): number | null | undefined =>
+    pricesLoad.state.status === 'done' ? pricesLoad.state.data.find((p) => p.serviceSlug === slug && p.mode === m)?.amountMinor ?? null : undefined
 
   useEffect(() => {
     if (firstRender.current) { firstRender.current = false; return }
@@ -66,8 +101,30 @@ export function ConsultationRequestFlow() {
     if (step === 3) found = validateReviewStep(draft)
     setErrors(found)
     if (hasErrors(found)) return
-    if (step === 3) setPrepared(true)
-    else setStep(step + 1)
+    if (step === 3) {
+      if (online) void submitOnline()
+      else setPrepared(true)
+    } else setStep(step + 1)
+  }
+
+  async function submitOnline() {
+    if (submitting || createdId || !data || !consentVersion || !service || !mode) return
+    setSubmitting(true)
+    setSubmitFailure(null)
+    const result = await data.createRequest({
+      serviceSlug: service.slug,
+      mode: mode.id,
+      concern: draft.concern,
+      dateOfBirth: service.dob === 'none' ? '' : draft.dateOfBirth,
+      preferredLanguage: draft.preferredLanguage,
+      consentVersion,
+    })
+    setSubmitting(false)
+    if (!result.ok) {
+      setSubmitFailure(result.code)
+      return
+    }
+    setCreatedId(result.data.id)
   }
 
   const back = () => { setErrors({}); setStep(Math.max(0, step - 1)) }
@@ -93,6 +150,23 @@ export function ConsultationRequestFlow() {
     setDraft(emptyDraft); setErrors({}); setStep(0); setPrepared(false); setCopyState('idle')
   }
 
+  // ---------- Submitted online ----------
+  if (createdId && service && mode) {
+    return (
+      <div className="panel stack">
+        <h2 ref={headingRef} tabIndex={-1} style={{ outline: 'none' }}>Your request has been received</h2>
+        <Notice tone="success" role="status">
+          <p><strong>Thank you.</strong> We have your request for {service.name} ({mode.name}). It is <strong>not a confirmed booking yet</strong>: our team will check payment, then arrange an expert and a time.</p>
+        </Notice>
+        <p>Next step: open your request to see the price and payment instructions, and to submit your UPI payment reference.</p>
+        <div className="cluster">
+          <button type="button" className="btn btn--primary" onClick={() => navigate(`/dashboard/requests/${createdId}`)}>Open my request</button>
+          <Link className="btn btn--ghost" to="/dashboard">Go to my dashboard</Link>
+        </div>
+      </div>
+    )
+  }
+
   // ---------- Prepared (final) screen ----------
   if (prepared && service && mode) {
     return (
@@ -111,7 +185,7 @@ export function ConsultationRequestFlow() {
         <div>
           <h3 style={{ fontSize: '1.3rem' }}>Send it to the team</h3>
           {mailto ? (
-            <p>This opens your own email app with the request filled in. You review it and press send there.</p>
+            <p>Choose WhatsApp or email. Either opens your own app with the request filled in. You review it and press send there. Our team replies personally.</p>
           ) : (
             <Notice tone="warn">
               <p>Our contact email isn’t set up yet, so there is no address to send this to. You can still copy the summary below
@@ -121,7 +195,8 @@ export function ConsultationRequestFlow() {
           )}
         </div>
         <div className="cluster">
-          {mailto && <a className="btn btn--primary" href={mailto}><Mail size={18} aria-hidden="true" /> Open in email app</a>}
+          <a className="btn btn--primary" href={whatsappUrl(summary)} target="_blank" rel="noopener noreferrer"><MessageCircle size={18} aria-hidden="true" /> Send on WhatsApp</a>
+          {mailto && <a className="btn btn--ghost" href={mailto}><Mail size={18} aria-hidden="true" /> Open in email app</a>}
           <button type="button" className="btn btn--ghost" onClick={copySummary}>
             <ClipboardCopy size={18} aria-hidden="true" /> Copy summary
           </button>
@@ -142,6 +217,19 @@ export function ConsultationRequestFlow() {
   // ---------- Steps ----------
   return (
     <div className="panel">
+      {data && !signedIn && auth.status !== 'loading' && (
+        <Notice role="status">
+          <p><strong>Want to send this online?</strong> <Link to={`/login?next=${encodeURIComponent('/consultation/request')}`}>Log in</Link> or <Link to="/signup">create an account</Link> first. Without an account you can still prepare your request and email it to us.</p>
+        </Notice>
+      )}
+      {data && signedIn && consentLoad.state.status === 'done' && !consentVersion && (
+        <Notice tone="warn" role="status">
+          <p><strong>Online requests aren’t open yet.</strong> You can still prepare your request below and send it to us by email. Nothing is stored by this website.</p>
+        </Notice>
+      )}
+      {online && (
+        <Notice role="status"><p>You’re logged in, so this request will be saved to your account and you can follow it on your dashboard.</p></Notice>
+      )}
       <ol className="stepper" aria-label="Progress">
         {STEPS.map((label, i) => (
           <li key={label} className={i < step ? 'done' : ''} aria-current={i === step ? 'step' : undefined}>
@@ -184,19 +272,21 @@ export function ConsultationRequestFlow() {
               Service: <strong>{service.name}</strong> · <button type="button" className="link-arrow" style={{ background: 'none', border: 0, cursor: 'pointer', padding: 0, color: 'var(--gold-ink)', textDecoration: 'underline' }} onClick={() => { setStep(0) }}>change</button>
             </p>
             <Notice>
-              <p>We ask only for what this service needs. Your details are used to prepare your consultation request and are not
-              stored by this website at this stage.</p>
+              {online
+                ? <p>We ask only for what this service needs. Your request is saved to your account so you and our team can follow it. Your name and email come from your account.</p>
+                : <p>We ask only for what this service needs. Your details are used to prepare your consultation request and are not
+                  stored by this website at this stage.</p>}
             </Notice>
             <div className="form-grid form-grid--2">
-              <Field label="Full name" error={errors.fullName}>
+              {!online && <Field label="Full name" error={errors.fullName}>
                 {(a) => <input id={a.id} className="input" value={draft.fullName} autoComplete="name" maxLength={80} aria-describedby={a.describedBy} aria-invalid={a.invalid} onChange={(e) => set('fullName', e.target.value)} />}
-              </Field>
-              <Field label="Email" error={errors.email}>
+              </Field>}
+              {!online && <Field label="Email" error={errors.email}>
                 {(a) => <input id={a.id} className="input" type="email" value={draft.email} autoComplete="email" aria-describedby={a.describedBy} aria-invalid={a.invalid} onChange={(e) => set('email', e.target.value)} />}
-              </Field>
-              <Field label="Phone / WhatsApp" optional error={errors.phone}>
+              </Field>}
+              {!online && <Field label="Phone / WhatsApp" optional error={errors.phone}>
                 {(a) => <input id={a.id} className="input" type="tel" value={draft.phone} autoComplete="tel" aria-describedby={a.describedBy} aria-invalid={a.invalid} onChange={(e) => set('phone', e.target.value)} />}
-              </Field>
+              </Field>}
               {service.dob !== 'none' && (
                 <Field
                   label="Date of birth"
@@ -252,36 +342,42 @@ export function ConsultationRequestFlow() {
             <dl className="summary">
               <div><dt>Service</dt><dd>{service.name}</dd></div>
               <div><dt>Mode</dt><dd>{mode.name}</dd></div>
-              <div><dt>Price</dt><dd>{formatPrice(getPrice(service.slug, mode.id))} <span className="hint">(placeholder — no payment is taken)</span></dd></div>
+              <div><dt>Price</dt><dd>
+                {online && priceMinor(service.slug, mode.id) !== undefined ? formatMoney(priceMinor(service.slug, mode.id) ?? null) : formatPrice(getPrice(service.slug, mode.id))}{' '}
+                <span className="hint">{online ? '(you pay only after submitting, with your own UPI app)' : '(placeholder — no payment is taken)'}</span></dd></div>
               <div><dt>Name</dt><dd>{draft.fullName.trim()}</dd></div>
               <div><dt>Email</dt><dd>{draft.email.trim()}</dd></div>
               {draft.phone.trim() && <div><dt>Phone</dt><dd>{draft.phone.trim()}</dd></div>}
               {draft.dateOfBirth && <div><dt>Date of birth</dt><dd>{draft.dateOfBirth}</dd></div>}
               {draft.preferredLanguage.trim() && <div><dt>Language</dt><dd>{draft.preferredLanguage.trim()}</dd></div>}
               <div><dt>Guidance on</dt><dd>{draft.concern.trim()}</dd></div>
-              <div><dt>Status</dt><dd>{bookingStatusInfo.draft.label} — {bookingStatusInfo.draft.meaning}</dd></div>
+              <div><dt>Status</dt><dd>{online ? 'Not submitted yet' : `${bookingStatusInfo.draft.label} — ${bookingStatusInfo.draft.meaning}`}</dd></div>
             </dl>
             <Notice>
-              <p>The next screen gives you a summary to send to our team by email. A time with an
-              expert is only agreed after the team reviews your request; availability is not guaranteed.</p>
+              <p>{online
+                ? 'When you submit, your request is saved and you’ll see your payment steps. A time with an expert is only agreed after our team checks payment and reviews your request; availability is not guaranteed.'
+                : 'The next screen gives you a summary to send to our team by email. A time with an expert is only agreed after the team reviews your request; availability is not guaranteed.'}</p>
             </Notice>
             <div className="field">
               <label className="check">
                 <input type="checkbox" checked={draft.consent} aria-describedby={errors.consent ? 'consent-err' : undefined} aria-invalid={Boolean(errors.consent)} onChange={(e) => set('consent', e.target.checked)} />
-                <span>I understand my details will be used only to prepare and handle this consultation request, and that this request is not a confirmed booking.</span>
+                <span>I understand my details will be used only to prepare and handle this consultation request, and that this request is not a confirmed booking. (See our <a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>, which opens in a new tab.)</span>
               </label>
               <FieldError id="consent-err" message={errors.consent} />
             </div>
           </>
         )}
 
+        {submitFailure && <Notice tone="danger" role="alert"><p>{dataErrorMessage[submitFailure]}</p></Notice>}
         {Object.values(errors).some(Boolean) && step !== 0 && (
           <Notice tone="danger" role="alert"><p>Please fix the highlighted fields to continue.</p></Notice>
         )}
 
         <div className="cluster" style={{ justifyContent: 'space-between' }}>
           {step > 0 ? <button type="button" className="btn btn--ghost" onClick={back}>Back</button> : <span />}
-          <button type="submit" className="btn btn--primary">{step === 3 ? 'Prepare my request' : 'Continue'}</button>
+          <button type="submit" className="btn btn--primary" disabled={submitting}>
+            {step === 3 ? (online ? (submitting ? 'Submitting…' : 'Submit my request') : 'Prepare my request') : 'Continue'}
+          </button>
         </div>
       </form>
     </div>

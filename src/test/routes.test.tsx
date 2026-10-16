@@ -6,7 +6,7 @@ import { routes } from '../App'
 const paths = [
   '/', '/about', '/services', '/services/numerology', '/services/palmistry', '/services/gemstone-guidance',
   '/services/color-therapy', '/how-it-works', '/experts', '/consultation', '/consultation/request', '/free-insight',
-  '/contact', '/login', '/signup', '/dashboard', '/privacy', '/terms', '/refund-policy',
+  '/contact', '/payment', '/login', '/signup', '/forgot-password', '/reset-password', '/dashboard', '/privacy', '/terms', '/refund-policy',
 ]
 
 function renderAt(path: string) {
@@ -71,14 +71,15 @@ describe('honesty guardrails (PROJECT_BRIEF §1)', () => {
     }
   })
 
-  it('experts page labels every profile as a demonstration', () => {
+  it('the experts page invents no experts: it lists nobody and says the right expert is connected from our end', () => {
     renderAt('/experts')
-    expect(screen.getAllByText(/demonstration profile$/i).length).toBeGreaterThanOrEqual(3)
-    expect(screen.getByText(/No real expert information has been added yet/i)).toBeInTheDocument()
+    expect(screen.getByText(/right expert will be connected to you from our end/i)).toBeInTheDocument()
+    expect(screen.queryByText(/demonstration/i)).toBeNull()
+    expect(screen.queryAllByRole('article')).toHaveLength(0)
   })
 
-  it('login, signup and dashboard say they are not available', () => {
-    for (const path of ['/login', '/signup', '/dashboard']) {
+  it('login, signup, password reset and dashboard say they are not available', () => {
+    for (const path of ['/login', '/signup', '/forgot-password', '/reset-password', '/dashboard']) {
       const { unmount } = renderAt(path)
       expect(screen.getByRole('status')).toHaveTextContent(/isn’t available yet/i)
       unmount()

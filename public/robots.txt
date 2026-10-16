@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+# Private areas are not meant to appear in search results.
+Disallow: /admin
+Disallow: /staff
+Disallow: /dashboard
+Disallow: /login
+Disallow: /signup
+Disallow: /forgot-password
+Disallow: /reset-password

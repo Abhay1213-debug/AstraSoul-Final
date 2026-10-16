@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { ModeCards } from '../components/ModeCards'
 import { ButtonLink, Notice, PageHero, SectionHead } from '../components/ui'
 import { bookingStatusInfo, paymentStatusInfo } from '../data/consultationModes'
@@ -40,7 +41,7 @@ export default function Consultation() {
                   <div key={s.label}><dt style={{ fontWeight: 700 }}>{s.label}</dt><dd style={{ margin: 0, color: 'var(--text-muted)' }}>{s.meaning}</dd></div>
                 ))}
               </dl>
-              <p className="hint" style={{ marginTop: 'var(--space-3)' }}>Payments are not available yet; the payment provider has not been chosen.</p>
+              <p className="hint" style={{ marginTop: 'var(--space-3)' }}>You pay with your own UPI app after our team confirms the amount. See <Link to="/payment">how payment works</Link>.</p>
             </div>
           </div>
         </div>

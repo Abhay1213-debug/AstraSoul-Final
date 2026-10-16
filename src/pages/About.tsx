@@ -12,7 +12,7 @@ export default function About() {
       <section className="section">
         <div className="container container--narrow stack">
           <h2>What we’re building</h2>
-          <p>{siteConfig.brandName} helps you work out what you’re looking for, choose a relevant service — numerology, palmistry, gemstone guidance or color therapy — and consult a human expert by chat, voice or video. After a consultation, the plan is for your expert’s guidance to be recorded in a personalised PDF report you can come back to.</p>
+          <p>{siteConfig.brandName} helps you work out what you’re looking for, choose a relevant service — numerology, palmistry, gemstone guidance or color therapy — and consult a human expert by chat, voice or video. Our team connects the right expert to you and arranges the session with you personally.</p>
           <p>We also offer a simple free introductory tool: your Moolank. It is a starting point for reflection and does not replace a conversation with an expert.</p>
           <h2>What we believe</h2>
           <ul>

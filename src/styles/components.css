@@ -127,8 +127,29 @@
 .status-table th, .status-table td { text-align: left; padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--line); vertical-align: top; }
 .status-table tbody tr:last-child > * { border-bottom: 0; }
 .status-table thead th { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); background: var(--paper); }
-.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.table-wrap { position: relative; overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
 
 .legal h2 { font-size: var(--fs-h3); margin-top: var(--space-7); }
 .legal h3 { font-size: var(--fs-h4); margin-top: var(--space-5); }
 .placeholder { background: #f7e3b8; border-bottom: 1px dashed var(--gold-ink); padding: 0 0.2em; border-radius: 3px; }
+
+/* ---------- "Get in touch" button (fixed bottom-right on every page) ---------- */
+.touch { position: fixed; right: max(var(--space-4), env(safe-area-inset-right)); bottom: max(var(--space-4), env(safe-area-inset-bottom)); z-index: 60; display: grid; justify-items: end; gap: var(--space-3); }
+.touch__button { display: inline-flex; align-items: center; gap: var(--space-2); min-height: 48px; padding: 0.7rem 1.25rem; border-radius: 999px; border: 1px solid rgb(48 35 28 / 0.25); background: linear-gradient(180deg, #e4c887 0%, var(--champagne) 100%); color: var(--espresso); font-weight: 700; font-size: 0.92rem; cursor: pointer; box-shadow: 0 8px 24px rgb(48 35 28 / 0.35); transition: transform 0.2s var(--ease); }
+.touch__button:hover { transform: translateY(-2px); }
+.touch__panel { width: min(21rem, calc(100vw - 2rem)); display: grid; gap: var(--space-3); padding: var(--space-4); border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line-strong); box-shadow: 0 16px 40px rgb(48 35 28 / 0.35); color: var(--text); }
+.touch__head { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); }
+.touch__close { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: transparent; cursor: pointer; color: inherit; }
+.touch__lede { margin: 0; font-size: 0.9rem; color: var(--text-muted); }
+.touch__option { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-radius: var(--radius); border: 1px solid var(--line); background: #fffdf8; text-decoration: none; color: inherit; }
+.touch__option:hover { border-color: var(--gold); background: #fff; }
+.touch__option svg { flex: none; color: var(--gold-ink); }
+.touch__option strong { display: block; }
+.touch__detail { display: block; font-size: 0.88rem; color: var(--text-muted); overflow-wrap: anywhere; }
+.touch__alt { font-size: 0.85rem; justify-self: start; }
+@media (max-width: 480px) { .touch__button span { display: none; } .touch__button { padding: 0.7rem; min-width: 48px; justify-content: center; } }
+@media print { .touch { display: none; } }
+
+/* ---------- UPI details ---------- */
+.pay__qr { margin: 0; display: grid; justify-items: center; gap: var(--space-3); text-align: center; }
+.pay__qr img { width: min(300px, 100%); height: auto; border-radius: var(--radius); border: 1px solid var(--line); background: #fff; }

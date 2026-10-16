@@ -2,7 +2,7 @@ import type { ConsultationModeId, ServiceSlug } from '../types/domain'
 
 /**
  * PRICING PLACEHOLDERS. No real prices have been provided yet.
- * `null` means "not set" and the UI shows "Price to be confirmed".
+ * `null` means "not set" and the UI shows "Price coming soon".
  * Amounts are in the smallest currency unit (paise for INR) to avoid float errors.
  */
 export interface PriceEntry {
@@ -23,7 +23,7 @@ function unset(): Record<ConsultationModeId, PriceEntry> {
 }
 
 export function formatPrice(entry: PriceEntry): string {
-  if (entry.amountMinor === null) return 'Price to be confirmed'
+  if (entry.amountMinor === null) return 'Price coming soon'
   return new Intl.NumberFormat('en-IN', { style: 'currency', currency: entry.currency }).format(
     entry.amountMinor / 100,
   )

@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom'
-import { siteConfig } from '../config/site'
+import { useAuth } from '../lib/auth'
+import { contactChannels, siteConfig } from '../config/site'
 import { services } from '../data/services'
 import { Rings } from './art'
 import { Logo } from './Logo'
 import { ButtonLink } from './ui'
 
 export function Footer() {
+  const accountsOn = useAuth().state.status !== 'unavailable'
   return (
     <footer className="site-footer">
       <Rings className="footer-rings" />
@@ -38,14 +40,15 @@ export function Footer() {
               <li><Link to="/consultation">Consultation options</Link></li>
               <li><Link to="/free-insight">Free introductory insight</Link></li>
               <li><Link to="/about">About</Link></li>
+              <li><Link to="/payment">How payment works</Link></li>
               <li><Link to="/contact">Contact</Link></li>
             </ul>
           </nav>
           <nav aria-label="Account and legal">
-            <h2>Account &amp; legal</h2>
+            <h2>{accountsOn ? 'Account & legal' : 'Legal'}</h2>
             <ul>
-              <li><Link to="/login">Log in</Link></li>
-              <li><Link to="/signup">Sign up</Link></li>
+              {accountsOn && <li><Link to="/login">Log in</Link></li>}
+              {accountsOn && <li><Link to="/signup">Sign up</Link></li>}
               <li><Link to="/privacy">Privacy Policy</Link></li>
               <li><Link to="/terms">Terms &amp; Conditions</Link></li>
               <li><Link to="/refund-policy">Refund Policy</Link></li>
@@ -57,7 +60,10 @@ export function Footer() {
             Guidance on this site is offered for reflection and exploration. It does not promise specific outcomes and is not
             medical, legal or financial advice. Detailed recommendations come from human experts, not from software.
           </p>
-          <p>© {new Date().getFullYear()} {siteConfig.brandName}. Early pilot — some features are still being built; each page says what is and is not available.</p>
+          <p>
+            Contact: <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a> · WhatsApp {contactChannels.whatsappDisplay}
+          </p>
+          <p>© {new Date().getFullYear()} {siteConfig.brandName}. A personal, hands-on service run from Gurugram, India.</p>
         </div>
       </div>
     </footer>

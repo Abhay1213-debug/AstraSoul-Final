@@ -24,7 +24,7 @@ describe('buildRequestSummary', () => {
   it('includes the key fields and placeholder price', () => {
     expect(text).toContain('Service: Palmistry')
     expect(text).toContain('Consultation mode: Video consultation')
-    expect(text).toContain('Price to be confirmed')
+    expect(text).toContain('Price coming soon')
     expect(text).toContain('Asha Rao')
     expect(text).toContain('Palm photographs: to be shared securely')
   })

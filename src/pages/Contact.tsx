@@ -1,9 +1,10 @@
-import { Mail } from 'lucide-react'
+import { Mail, MessageCircle } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { Field } from '../components/forms'
 import { Notice, PageHero } from '../components/ui'
-import { siteConfig } from '../config/site'
+import { contactChannels, siteConfig } from '../config/site'
 import { usePageTitle } from '../hooks/usePageTitle'
+import { contactMessage, contactSubject, gmailComposeUrl, mailtoUrl, whatsappUrl } from '../lib/contact'
 import { isValidEmail } from '../lib/requestValidation'
 import { buildMailto } from '../lib/requestSummary'
 
@@ -15,6 +16,7 @@ export default function Contact() {
   const [errors, setErrors] = useState<Errors>({})
   const [opened, setOpened] = useState(false)
   const configured = Boolean(siteConfig.contactEmail)
+  const ctx = { page: 'the Contact page', path: '/contact' }
 
   function onSubmit(e: FormEvent) {
     e.preventDefault()
@@ -27,8 +29,8 @@ export default function Contact() {
     if (Object.keys(found).length) return
     const url = buildMailto(
       siteConfig.contactEmail,
-      `Message from ${form.name.trim()}`,
-      `${form.message.trim()}\n\n— ${form.name.trim()} (${form.email.trim()})`,
+      `Message from ${form.name.trim()} via the ${siteConfig.brandName} website`,
+      `${form.message.trim()}\n\n— ${form.name.trim()} (${form.email.trim()})\nSent from the ${siteConfig.brandName} website, Contact page.`,
     )
     if (url) {
       window.location.href = url
@@ -40,16 +42,30 @@ export default function Contact() {
 
   return (
     <>
-      <PageHero eyebrow="Contact" title="Get in touch" lede="Questions about a service, a consultation, or how the pilot works? Write to us." />
+      <PageHero eyebrow="Contact" title="Get in touch" lede="Questions about a service, a consultation or payment? Message us on WhatsApp or email. Our team replies personally." />
       <section className="section">
         <div className="container container--narrow stack">
-          {!configured ? (
-            <Notice tone="warn" role="status">
-              <p><strong>Our contact channel isn’t set up yet.</strong> Please check back soon.</p>
-              {import.meta.env.DEV && <p className="hint">Developer note: set <code>VITE_CONTACT_EMAIL</code> in <code>.env.local</code> to enable this form.</p>}
-            </Notice>
-          ) : (
-            <form className="panel form" onSubmit={onSubmit} noValidate>
+          <div className="grid grid--2">
+            <a className="card card--flat" href={whatsappUrl(contactMessage(ctx))} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+              <span className="card__icon"><MessageCircle size={24} strokeWidth={1.6} aria-hidden="true" /></span>
+              <h2 style={{ fontSize: '1.3rem' }}>WhatsApp</h2>
+              <p style={{ margin: 0 }}>{contactChannels.whatsappDisplay}</p>
+              <p className="hint" style={{ margin: 0 }}>Opens WhatsApp with a message already written for you.</p>
+            </a>
+            {configured && (
+              <a className="card card--flat" href={gmailComposeUrl(contactSubject(ctx), contactMessage(ctx))} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                <span className="card__icon"><Mail size={24} strokeWidth={1.6} aria-hidden="true" /></span>
+                <h2 style={{ fontSize: '1.3rem' }}>Gmail</h2>
+                <p style={{ margin: 0, overflowWrap: 'anywhere' }}>{siteConfig.contactEmail}</p>
+                <p className="hint" style={{ margin: 0 }}>Opens a Gmail message with your note already started.</p>
+              </a>
+            )}
+          </div>
+          {configured && <p className="hint">On a phone or without Gmail? <a href={mailtoUrl(contactSubject(ctx), contactMessage(ctx))}>Use your own email app instead</a>.</p>}
+
+          {configured && (
+            <form className="panel form" onSubmit={onSubmit} noValidate aria-label="Write us a message">
+              <h2 style={{ fontSize: 'var(--fs-h3)' }}>Or write a message here</h2>
               <Notice><p>This form opens <strong>your own email app</strong> with your message ready to send. Nothing is sent until you press send there.</p></Notice>
               <div className="form-grid form-grid--2">
                 <Field label="Your name" error={errors.name}>

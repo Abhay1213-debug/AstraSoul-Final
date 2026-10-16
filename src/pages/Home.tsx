@@ -147,28 +147,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section section--sage" aria-labelledby="report-h">
-        <div className="container split">
-          <div className="stack">
-            <span className="eyebrow">After your consultation <StatusBadge status={featureStatus.pdfReports} /></span>
-            <h2 id="report-h">A written record of <em>your session</em></h2>
-            <p className="lede">The plan is for each consultation to end with a personalised PDF report that records your expert’s guidance and recommended remedies, which you can revisit from your account.</p>
-            <p>This is not available yet. Reports will only ever contain what your expert actually advised — never generated findings.</p>
-          </div>
-          <Reveal>
-            <div className="paper-stack" role="img" aria-label="Illustration of a report layout. Planned feature; not a real report.">
-              <div className="report-preview">
-                <span className="badge badge--planned">Planned · illustration</span>
-                <h3>Guidance report</h3>
-                <div className="rp-rule" />
-                <p className="caption" style={{ marginBottom: 'var(--space-4)' }}>Layout illustration only — not a real report</p>
-                {Array.from({ length: 8 }).map((_, i) => <div key={i} className={`rp-line${i === 3 ? ' short' : ''}`} />)}
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
       <section className="section" aria-labelledby="cta-h">
         <div className="container container--wide">
           <Reveal>
@@ -176,7 +154,7 @@ export default function Home() {
               <div className="stage__text">
                 <span className="eyebrow">Begin</span>
                 <h2 id="cta-h">Ready to ask <em>your question?</em></h2>
-                <p className="lede">Prepare a consultation request in a few minutes. Nothing is charged, and you review everything before sending.</p>
+                <p className="lede">Prepare a consultation request in a few minutes and send it to us on WhatsApp or email. Nothing is charged until our team confirms the details with you.</p>
                 <div className="cluster">
                   <ButtonLink to="/consultation/request" arrow>Start a consultation request</ButtonLink>
                   <ButtonLink to="/contact" variant="ghost">Ask us a question</ButtonLink>
@@ -186,7 +164,7 @@ export default function Home() {
             </div>
           </Reveal>
           <div style={{ marginTop: 'var(--space-6)', maxWidth: 780, marginInline: 'auto' }}>
-            <Notice><p><strong>Early pilot.</strong> {siteConfig.brandName} is a pilot: payments, accounts and PDF reports are still being built, and the expert profiles shown are demonstrations. Each page states what is and isn’t available.</p></Notice>
+            <Notice><p><strong>Early pilot.</strong> {siteConfig.brandName} is a personal, hands-on service: our team replies to every request, connects the right expert to you and arranges the session with you. Online accounts are coming soon.</p></Notice>
           </div>
         </div>
       </section>

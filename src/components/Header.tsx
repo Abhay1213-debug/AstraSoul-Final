@@ -2,6 +2,8 @@ import { Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { useScrolled } from '../hooks/useHeaderState'
+import { useAuth } from '../lib/auth'
+import { useData } from '../lib/data'
 import { Logo } from './Logo'
 import { ButtonLink } from './ui'
 
@@ -19,6 +21,11 @@ export function Header() {
   const [open, setOpen] = useState(false)
   const { pathname } = useLocation()
   const scrolled = useScrolled()
+  const authStatus = useAuth().state.status
+  const signedIn = authStatus === 'signed_in'
+  const accountsOn = authStatus !== 'unavailable'
+  const { role } = useData()
+  const roleLink = role.status === 'admin' ? { to: '/admin', label: 'Admin' } : role.status === 'staff' ? { to: '/staff', label: 'My requests' } : null
   // On the home page the header floats transparently over the dark hero until the page scrolls.
   const floating = pathname === '/' && !scrolled && !open
 
@@ -45,7 +52,10 @@ export function Header() {
             ))}
           </nav>
           <div className="header-actions">
-            <NavLink to="/login" className="btn btn--ghost btn--sm">Log in</NavLink>
+            {roleLink && <NavLink to={roleLink.to} className="btn btn--ghost btn--sm">{roleLink.label}</NavLink>}
+            {signedIn
+              ? <NavLink to="/dashboard" className="btn btn--ghost btn--sm">My dashboard</NavLink>
+              : accountsOn && <NavLink to="/login" className="btn btn--ghost btn--sm">Log in</NavLink>}
             <ButtonLink to="/consultation/request" small>Start a request</ButtonLink>
           </div>
           <button
@@ -66,7 +76,8 @@ export function Header() {
           {primaryNav.map((item) => (
             <NavLink key={item.to} to={item.to}>{item.label}</NavLink>
           ))}
-          <NavLink to="/login">Log in</NavLink>
+          {roleLink && <NavLink to={roleLink.to}>{roleLink.label}</NavLink>}
+          {signedIn ? <NavLink to="/dashboard">My dashboard</NavLink> : accountsOn && <NavLink to="/login">Log in</NavLink>}
           <ButtonLink to="/consultation/request">Start a consultation request</ButtonLink>
         </nav>
       )}

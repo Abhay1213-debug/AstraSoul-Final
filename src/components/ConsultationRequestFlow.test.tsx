@@ -54,7 +54,7 @@ describe('<ConsultationRequestFlow />', () => {
     await next(user)
 
     expect(screen.getByRole('heading', { name: /review your request/i })).toBeInTheDocument()
-    expect(screen.getByText(/Price to be confirmed/)).toBeInTheDocument()
+    expect(screen.getByText(/Price coming soon/)).toBeInTheDocument()
     await next(user) // consent missing
     expect(screen.getByText(/please confirm you understand/i)).toBeInTheDocument()
     await user.click(screen.getByRole('checkbox'))
@@ -63,9 +63,11 @@ describe('<ConsultationRequestFlow />', () => {
     expect(screen.getByRole('heading', { name: /prepared — it has not been sent yet/i })).toBeInTheDocument()
     expect(screen.getByText(/Nothing has been submitted, booked or paid/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /copy summary/i })).toBeInTheDocument()
-    // No contact email is configured in tests → no mailto link, and the UI says so.
-    expect(screen.queryByRole('link', { name: /open in email app/i })).not.toBeInTheDocument()
-    expect(screen.getByText(/contact email isn’t set up yet/i)).toBeInTheDocument()
+    // Sending is by the visitor's OWN WhatsApp / email app; the site never sends anything itself.
+    const wa = screen.getByRole('link', { name: /send on whatsapp/i })
+    expect(wa.getAttribute('href')).toMatch(/^https:\/\/wa\.me\/918795272576\?text=/)
+    expect(decodeURIComponent(wa.getAttribute('href')!)).toMatch(/Asha Rao/)
+    expect(screen.getByRole('link', { name: /open in email app/i }).getAttribute('href')).toMatch(/^mailto:abhayprabhakar1213@gmail\.com\?/)
   })
 
   it('keeps entered data when going back a step', async () => {

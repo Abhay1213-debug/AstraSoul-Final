@@ -1,9 +1,12 @@
 import type { ReactNode } from 'react'
-import { Notice, PageHero } from '../components/ui'
-import { siteConfig } from '../config/site'
+import { Link } from 'react-router-dom'
+import { PageHero } from '../components/ui'
+import { consultationInfo, contactChannels, operator, refundRule, siteConfig } from '../config/site'
 import { usePageTitle } from '../hooks/usePageTitle'
+import { accountsEnabled } from '../lib/auth/createAuthService'
 
-const P = ({ children }: { children: ReactNode }) => <span className="placeholder">{children}</span>
+/** Bump this when the wording changes. */
+const UPDATED = '16 October 2026'
 
 function LegalPage({ title, children }: { title: string; children: ReactNode }) {
   usePageTitle(title)
@@ -12,61 +15,106 @@ function LegalPage({ title, children }: { title: string; children: ReactNode }) 
       <PageHero eyebrow="Legal" title={title} />
       <section className="section section--tight">
         <div className="container container--narrow legal">
-          <Notice tone="danger">
-            <p><strong>Template — not legal advice. Must be reviewed by a qualified professional before public launch.</strong> Highlighted <P>[bracketed text]</P> marks information the business must supply or confirm. Statements describe the site as it works today and must be updated as features (accounts, payments, reports) are added.</p>
-          </Notice>
+          <p>Last updated: {UPDATED}</p>
           {children}
+          <p className="hint">These pages are written in plain language to describe how this website really works. They have not been reviewed by a lawyer.</p>
         </div>
       </section>
     </>
   )
 }
 
+const Contact = () => (
+  <>
+    <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a> or WhatsApp {contactChannels.whatsappDisplay}
+  </>
+)
+
 export function Privacy() {
+  const accounts = accountsEnabled()
   return (
     <LegalPage title="Privacy Policy">
-      <p>Last updated: <P>[date]</P></p>
       <h2>Who we are</h2>
-      <p>{siteConfig.brandName} (working name) is operated by <P>[legal entity name, registered address]</P>. Contact: <P>[privacy contact email]</P>.</p>
-      <h2>What this website does with your information today</h2>
+      <p>
+        {operator.business} is run by {operator.name} ({operator.role}), {operator.place}. You can reach us at <Contact />.
+      </p>
+
+      <h2>What we handle, and when</h2>
       <ul>
-        <li><strong>Free Moolank insight:</strong> your date of birth is processed in your browser only. It is not stored or sent to us.</li>
-        <li><strong>Consultation request form:</strong> details you type stay in your browser. They are not stored by this website. If you choose to email the summary to us, we receive it by email.</li>
-        <li><strong>Contact form:</strong> opens your email app; we receive only what you send.</li>
-        <li>This website does not currently create accounts, take payments, or accept file uploads.</li>
+        <li><strong>Free Moolank insight:</strong> your date of birth is worked out in your browser only. It is not stored or sent to us.</li>
+        <li><strong>Preparing a consultation request:</strong> what you type stays in your browser until you choose to send it. When you send it to us on WhatsApp or by email, we receive what you send, together with your WhatsApp number or email address.</li>
+        <li><strong>Messages to us:</strong> anything you write to us on WhatsApp or email, including through the “Get in touch” button. The button only opens your own app with a message ready; nothing is sent until you press send.</li>
+        <li><strong>Payments:</strong> you pay in your own UPI app, outside this website. If you tell us the UPI reference, the name shown in your app and the date, we keep them to check the payment. Please never send us a UPI PIN, an OTP, a card number or a banking password.</li>
+        {accounts && (
+          <>
+            <li><strong>Your account:</strong> if you create an account we store your name, email address and password (the password is held by our sign-in provider in a protected form and cannot be read by us), plus any phone number, date of birth or language you choose to add.</li>
+            <li><strong>Requests sent online:</strong> the service and mode you chose, what you ask guidance on, any date of birth the service needs, the version of the consent you accepted, and the status of the request. Our team and the expert connected to your request can read it. Other customers cannot.</li>
+            <li><strong>Activity records:</strong> we keep a record of changes to requests and payments so we can see what happened.</li>
+          </>
+        )}
       </ul>
-      <h2>Information we may handle as the service develops</h2>
-      <p>Name, email, phone, date of birth, consultation details, palm photographs and consultation reports. We will collect only what a service needs and explain why. <P>[Legal bases, purposes and retention periods to be defined.]</P></p>
-      <h2>Sharing</h2>
-      <p><P>[List processors and providers once chosen — hosting, database, email, payments, AI provider.]</P> We do not sell personal information.</p>
-      <h2>Security</h2>
-      <p>Private information such as reports and photographs will be stored securely and shown only to the customer it belongs to and authorised staff. <P>[Describe actual measures once implemented.]</P></p>
-      <h2>Your rights</h2>
-      <p><P>[Access, correction, deletion and complaint rights under applicable law, including India’s Digital Personal Data Protection Act, 2023 — to be confirmed by counsel.]</P></p>
-      <h2>Cookies and analytics</h2>
-      <p>This website does not currently use analytics or advertising cookies. <P>[Update if this changes.]</P></p>
+
+      <h2>Why we use it</h2>
+      <p>Only to answer you, connect the right expert, arrange and run your consultation, and check payments. We don’t sell your information and we don’t use it for advertising.</p>
+
+      <h2>Who else is involved</h2>
+      <p>
+        When you contact us on WhatsApp or email, those services (Meta and Google) carry your message under their own privacy policies.
+        This website is delivered by a hosting provider, which may keep ordinary technical logs of visits.
+        {accounts && ' Accounts, requests and payments records are stored with our database and sign-in provider (Supabase).'}
+        {' '}Consultations are usually held on Google Meet.
+      </p>
+
+      <h2>Cookies and tracking</h2>
+      <p>We don’t use advertising or analytics cookies. {accounts && 'If you log in, your browser keeps a sign-in token so you stay logged in; it is removed when you log out.'}</p>
+
+      <h2>How long we keep things</h2>
+      <p>We haven’t set fixed retention periods yet. We keep records only for as long as we need them to run the service and for our own accounts. You can ask us at any time what we hold about you, or ask us to correct or delete it.</p>
+
+      <h2>Your choices</h2>
+      <p>
+        To see, correct or delete your information, or to close your account, contact us at <Contact />. Some payment records may be kept in a form that no longer identifies you.
+      </p>
+
+      <h2>Changes</h2>
+      <p>If this page changes, the date at the top changes too.</p>
     </LegalPage>
   )
 }
 
 export function Terms() {
+  const accounts = accountsEnabled()
   return (
     <LegalPage title="Terms & Conditions">
-      <p>Last updated: <P>[date]</P></p>
       <h2>About the service</h2>
-      <p>{siteConfig.brandName} (working name) provides personalised spiritual guidance through human experts and some free introductory tools. Services are provided for reflection and exploration.</p>
+      <p>{siteConfig.brandName} provides personalised spiritual guidance through human experts (numerology, palmistry, gemstone guidance and color therapy), plus a free introductory insight. It is run by {operator.name}, {operator.place}.</p>
+
       <h2>No guaranteed outcomes; not professional advice</h2>
-      <p>Guidance is based on traditional practices. We do not promise specific outcomes, and nothing provided is medical, psychological, legal or financial advice. Please seek qualified professionals for those matters.</p>
-      <h2>Experts and consultations</h2>
-      <p>Detailed recommendations, including gemstone and palmistry conclusions and remedies, are given by human experts. During the pilot, assignment and scheduling are arranged manually and availability is not guaranteed. A consultation request is not a confirmed booking until confirmed by us.</p>
+      <p>Guidance is based on traditional practices and is offered for reflection and exploration. We do not promise specific outcomes, and nothing provided is medical, psychological, legal or financial advice. Please seek qualified professionals for those matters. Decisions you make are yours.</p>
+
+      <h2>Requests, experts and sessions</h2>
+      <p>
+        A request is not a confirmed booking. Our team reads every request, connects the right expert and agrees a time with you. {consultationInfo.line}{' '}
+        Availability is not guaranteed, and there is no instant connection.
+      </p>
+
       <h2>Prices and payment</h2>
-      <p>Prices: <P>[to be published]</P>. Payment methods and the payment provider: <P>[to be confirmed]</P>. A payment is considered received only once verified.</p>
+      <p>
+        Prices are coming soon. Our team confirms the amount with you before you pay. You pay in your own UPI app, directly to our account; see <Link to="/payment">how payment works</Link>.
+        A payment counts as received only once our team has checked it against our bank record.
+      </p>
+
+      <h2>Refunds</h2>
+      <p>{refundRule.line} The full rule is in the <Link to="/refund-policy">Refund Policy</Link>.</p>
+
       <h2>Your responsibilities</h2>
-      <p>Provide accurate information and do not misuse the service. Do not share passwords or financial details in consultation requests.</p>
-      <h2>Reports</h2>
-      <p>Where a report is provided, it records the expert’s guidance for your personal use. <P>[Terms on reuse and sharing.]</P></p>
-      <h2>Liability, governing law, disputes</h2>
-      <p><P>[To be drafted by counsel.]</P></p>
+      <p>Give accurate information, be respectful to our team and experts, and don’t misuse the service. Never share passwords, PINs, OTPs or banking details with us.{accounts && ' Keep your login details private.'}</p>
+
+      <h2>Our responsibility</h2>
+      <p>We will do our best to provide the service with care. To the extent the law allows, we are not responsible for decisions you take based on the guidance you receive.</p>
+
+      <h2>Law</h2>
+      <p>These terms are governed by the laws of India.</p>
     </LegalPage>
   )
 }
@@ -74,16 +122,15 @@ export function Terms() {
 export function Refund() {
   return (
     <LegalPage title="Refund Policy">
-      <p>Last updated: <P>[date]</P></p>
-      <p>No payments are taken through this website at present. This policy will apply once payments are introduced.</p>
-      <h2>Before a consultation is confirmed</h2>
-      <p><P>[Policy for requests cancelled before an expert and time are confirmed.]</P></p>
-      <h2>After confirmation</h2>
-      <p><P>[Cancellation and rescheduling windows; what happens if an expert is unavailable or a session cannot take place.]</P></p>
-      <h2>After a consultation</h2>
-      <p><P>[Conditions, if any, for refunds once guidance or a report has been delivered.]</P></p>
-      <h2>How refunds are issued</h2>
-      <p>A refund will be shown as a separate payment status. <P>[Refund method, timeline and how to request one.]</P></p>
+      <p>You pay with your own UPI app after our team confirms the amount with you. This website does not take payments itself.</p>
+      <h2>Before an expert is confirmed</h2>
+      <p>If you cancel before an expert has been confirmed for your consultation, {refundRule.beforeConfirmedPercent}% of the amount you paid is refunded.</p>
+      <h2>After an expert is confirmed</h2>
+      <p>Once an expert has been confirmed for your consultation, no refund is given.</p>
+      <h2>How to ask</h2>
+      <p>Contact us at <Contact /> and tell us the service you booked and the UPI reference of your payment. Once we have verified the cancellation, the refund is sent back by UPI to the account you paid from, and we will let you know when it has been sent.</p>
+      <h2>If something goes wrong</h2>
+      <p>If there is a problem with a confirmed session, please contact us and we will talk to you about it.</p>
     </LegalPage>
   )
 }

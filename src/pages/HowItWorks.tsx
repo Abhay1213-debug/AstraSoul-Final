@@ -8,29 +8,26 @@ const journey = [
   { t: 'Choose a service and share the details it needs', d: 'Only what that service requires — for example your date of birth.' },
   { t: 'Try a free introductory insight (optional)', d: 'Find your Moolank. It is a simple starting point, not personalised advice.' },
   { t: 'Choose chat, voice or video', d: 'Tell us how you prefer to consult.' },
-  { t: 'Review your request', d: 'See exactly what you’re asking for, and the price once prices are set.' },
-  { t: 'The team arranges your expert', d: 'During the pilot, expert assignment and scheduling are done by people, not automatically.' },
-  { t: 'Consult your expert', d: 'Your expert provides the detailed guidance and recommendations.' },
-  { t: 'Receive your report', d: 'The plan is a personalised PDF recording your expert’s guidance, available from your account.' },
+  { t: 'Review your request and send it', d: 'See exactly what you’re asking for, then send it to us on WhatsApp or by email. Prices are coming soon.' },
+  { t: 'The right expert is connected to you', d: 'Our team chooses the expert for your service and mode and agrees a time with you. Experts are not listed in advance, and nothing is automatic.' },
+  { t: 'Consult your expert', d: 'Your expert provides the detailed guidance and recommendations. Each session is about 20 minutes, usually on Google Meet.' },
 ]
 
 const availability: { feature: string; status: FeatureStatus; note: string }[] = [
   { feature: 'Service information & free Moolank insight', status: featureStatus.moolankCalculator, note: 'Works today, entirely in your browser.' },
-  { feature: 'Consultation request preparation', status: featureStatus.consultationRequestForm, note: 'You can fill in and review a request. It is not stored or sent by this website — you send the summary by email yourself.' },
-  { feature: 'Voice & video consultations', status: featureStatus.videoConsultation, note: 'Coordinated manually (for example via Google Meet). Times are agreed with you; availability is not guaranteed.' },
-  { feature: 'Chat consultation', status: featureStatus.chatConsultation, note: 'No live chat system yet. The team will arrange the conversation after reviewing your request.' },
-  { feature: 'Expert directory', status: featureStatus.expertDirectory, note: 'Profiles shown are demonstrations, not real experts.' },
-  { feature: 'Online booking submission', status: featureStatus.onlineBookingSubmission, note: 'Planned. Needs a backend.' },
-  { feature: 'Payments', status: featureStatus.payments, note: 'Planned. The payment provider has not been chosen; nothing is charged.' },
-  { feature: 'Accounts & dashboard', status: featureStatus.accounts, note: 'Planned. Needs secure authentication and a database.' },
-  { feature: 'PDF guidance reports', status: featureStatus.pdfReports, note: 'Planned. Reports will contain only your expert’s approved guidance.' },
+  { feature: 'Consultation requests', status: featureStatus.consultationRequestForm, note: 'You prepare and review a request here, then send it to us on WhatsApp or by email. Our team replies personally.' },
+  { feature: 'Voice & video consultations', status: featureStatus.videoConsultation, note: 'Arranged by our team, usually on Google Meet. Times are agreed with you; availability is not guaranteed.' },
+  { feature: 'Chat consultation', status: featureStatus.chatConsultation, note: 'There is no live chat system yet. Our team arranges the conversation with you after reviewing your request.' },
+  { feature: 'Expert matching', status: featureStatus.expertDirectory, note: 'The right expert is connected to you by our team. Experts are not listed in advance.' },
+  { feature: 'Payments', status: featureStatus.payments, note: 'You pay with your own UPI app after our team confirms the amount with you. We check each payment by hand. Nothing is charged on this website.' },
+  { feature: 'Accounts & dashboard', status: featureStatus.accounts, note: 'Coming soon.' },
 ]
 
 export default function HowItWorks() {
   usePageTitle('How it works')
   return (
     <>
-      <PageHero eyebrow="How it works" title="A calm, guided path to personal guidance" lede="This is the full journey we are building towards — and, below it, exactly which parts work today." />
+      <PageHero eyebrow="How it works" title="A calm, guided path to personal guidance" lede="From your first question to your session, and exactly which parts are available today." />
       <section className="section" aria-labelledby="journey-h">
         <div className="container">
           <SectionHead title={<span id="journey-h">The journey</span>} />

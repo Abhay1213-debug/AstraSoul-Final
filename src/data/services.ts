@@ -44,7 +44,7 @@ export const services: Service[] = [
     whatTheExpertDoes: [
       'Studies your palm photographs',
       'Shares their interpretation and answers your questions',
-      'Records their conclusions in your personalised guidance report',
+      'Explains their conclusions and what they mean for you',
     ],
     whatItIsNot:
       'A palm reading is an interpretive tradition, not a diagnosis or a forecast. It does not promise specific outcomes.',
@@ -94,7 +94,7 @@ export const services: Service[] = [
     whatTheExpertDoes: [
       'Talks through your situation and preferences',
       'Suggests colours and practical ways to work with them',
-      'Summarises their suggestions in your guidance report',
+      'Sums up their suggestions so you know what to try next',
     ],
     whatItIsNot:
       'Colour therapy here is a wellbeing-oriented practice, not a medical or psychological treatment.',

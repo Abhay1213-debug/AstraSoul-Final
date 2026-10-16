@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { Footer } from './Footer'
+import { GetInTouch } from './GetInTouch'
 import { Header } from './Header'
 
 function ScrollToTop() {
@@ -25,6 +26,7 @@ export function Layout() {
         <Outlet />
       </main>
       <Footer />
+      <GetInTouch />
     </>
   )
 }

@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { ServiceArt } from '../components/art'
 import { ModeIcon } from '../components/icons'
 import { ButtonLink, Notice, Reveal, SectionHead, TextLink } from '../components/ui'
-import { formatPrice, getPrice } from '../config/pricing'
+import { useLivePrices } from '../hooks/useLivePrices'
 import { consultationModes } from '../data/consultationModes'
 import { serviceBySlug, services } from '../data/services'
 import { usePageTitle } from '../hooks/usePageTitle'
@@ -23,6 +23,7 @@ export default function ServiceDetail() {
   const { slug = '' } = useParams()
   const service = serviceBySlug(slug)
   usePageTitle(service?.name)
+  const priceText = useLivePrices()
   if (!service) return <NotFound />
   const others = services.filter((s) => s.slug !== service.slug)
 
@@ -70,7 +71,7 @@ export default function ServiceDetail() {
 
       <section className="section section--paper" aria-labelledby="modes-h">
         <div className="container">
-          <SectionHead split eyebrow="Consultation modes & pricing" title={<span id="modes-h">Choose how to <em>consult</em></span>} lede="Prices have not been set yet. Nothing is charged on this website at this stage." />
+          <SectionHead split eyebrow="Consultation modes & pricing" title={<span id="modes-h">Choose how to <em>consult</em></span>} lede="Prices are coming soon. Each consultation is about 20 minutes, arranged by our team. Nothing is charged on this website." />
           <div className="price-row grid grid--3">
             {consultationModes.map((m, i) => (
               <Reveal key={m.id} delay={i * 0.08}>
@@ -78,7 +79,7 @@ export default function ServiceDetail() {
                   <span className="card__icon"><ModeIcon icon={m.icon} /></span>
                   <h3>{m.name}</h3>
                   <p>{m.summary}</p>
-                  <strong>{formatPrice(getPrice(service.slug, m.id))}</strong>
+                  <strong>{priceText(service.slug, m.id)}</strong>
                   <div className="card__foot">
                     <ButtonLink to={`/consultation/request?service=${service.slug}&mode=${m.id}`} variant="ghost" small>Choose {m.id}</ButtonLink>
                   </div>
