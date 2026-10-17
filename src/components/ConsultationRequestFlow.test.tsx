@@ -68,6 +68,11 @@ describe('<ConsultationRequestFlow />', () => {
     expect(wa.getAttribute('href')).toMatch(/^https:\/\/wa\.me\/918795272576\?text=/)
     expect(decodeURIComponent(wa.getAttribute('href')!)).toMatch(/Asha Rao/)
     expect(screen.getByRole('link', { name: /open in email app/i }).getAttribute('href')).toMatch(/^mailto:abhayprabhakar1213@gmail\.com\?/)
+    // the payment option is on the last step: UPI ID + QR code, pay only after the amount is confirmed, never share a PIN
+    expect(screen.getByText('abhayprabhakar1213@okhdfcbank')).toBeInTheDocument()
+    expect(screen.getByAltText(/upi qr code for abhay prabhakar/i)).toHaveAttribute('src', '/images/upi-qr.jpg')
+    expect(screen.getByText(/please pay only after that/i)).toBeInTheDocument()
+    expect(screen.getByText(/never share your upi pin/i)).toBeInTheDocument()
   })
 
   it('keeps entered data when going back a step', async () => {

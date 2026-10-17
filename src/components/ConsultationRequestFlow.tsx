@@ -9,6 +9,8 @@ import { useLoad } from '../hooks/useLoad'
 import { useAuth } from '../lib/auth'
 import { dataErrorMessage, useData, type DataErrorCode } from '../lib/data'
 import { formatMoney } from '../lib/format'
+import { PaymentDetails } from './PaymentDetails'
+import { refundRule } from '../config/site'
 import { whatsappUrl } from '../lib/contact'
 import { buildMailto, buildRequestSummary } from '../lib/requestSummary'
 import {
@@ -173,8 +175,8 @@ export function ConsultationRequestFlow() {
       <div className="panel stack">
         <h2 ref={headingRef} tabIndex={-1} style={{ outline: 'none' }}>Your request is prepared — it has not been sent yet</h2>
         <Notice tone="warn" role="status">
-          <p><strong>Nothing has been submitted, booked or paid.</strong> Online submission is not connected yet, and this
-          website has not stored your details. To make your request, send the summary below to our team yourself.</p>
+          <p><strong>Nothing has been submitted, booked or paid.</strong> Your request is only sent when you press send in
+          WhatsApp or your email app, and this website does not store your details. To make your request, send the summary below to our team.</p>
         </Notice>
         <dl className="summary">
           <div><dt>Status</dt><dd>{bookingStatusInfo.draft.label} — {bookingStatusInfo.draft.meaning}</dd></div>
@@ -206,6 +208,15 @@ export function ConsultationRequestFlow() {
           {copyState === 'copied' && <Notice tone="success"><p>Summary copied to your clipboard.</p></Notice>}
           {copyState === 'failed' && <Notice tone="danger"><p>Your browser did not allow copying. Please select the summary below and copy it manually.</p></Notice>}
         </div>
+        <section className="stack" aria-labelledby="pay-after-h">
+          <h3 id="pay-after-h" style={{ fontSize: '1.3rem' }}>Paying for your consultation</h3>
+          <p style={{ margin: 0 }}>
+            After you send this, our team replies and confirms the amount. <strong>Please pay only after that.</strong> You pay with your own UPI app,
+            using the UPI ID or QR code below, then tell us the UPI reference. {refundRule.line}
+          </p>
+          <PaymentDetails />
+          <Notice tone="warn"><p><strong>Never share your UPI PIN, an OTP, a card number or a banking password</strong> with us. See <Link to="/payment">how payment works</Link>.</p></Notice>
+        </section>
         <details>
           <summary style={{ cursor: 'pointer', fontWeight: 700 }}>Preview the summary text</summary>
           <pre style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', background: '#fffdf7', border: '1px solid var(--line)', borderRadius: 'var(--radius)', padding: 'var(--space-4)', fontFamily: 'inherit', fontSize: '0.92rem' }}>{summary}</pre>

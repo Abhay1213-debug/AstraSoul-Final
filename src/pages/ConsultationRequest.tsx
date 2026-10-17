@@ -4,9 +4,9 @@ import { usePageTitle } from '../hooks/usePageTitle'
 
 const next = [
   { t: 'You prepare your request', d: 'Four short steps on this page. Nothing is sent or stored by this website.' },
-  { t: 'You send it to our team', d: 'The final step gives you a summary to send by email, or to copy.' },
-  { t: 'The team arranges a time', d: 'Experts are assigned and scheduled by people during the pilot. Availability isn’t guaranteed, and there is no instant connection.' },
-  { t: 'No payment yet', d: 'No payment is taken at this stage, and prices have not been set.' },
+  { t: 'You send it to our team', d: 'The final step opens WhatsApp or your email app with your request ready to send.' },
+  { t: 'We confirm the amount and the time', d: 'Our team replies, connects the right expert and agrees a time with you. Availability isn’t guaranteed, and there is no instant connection.' },
+  { t: 'You pay by UPI', d: 'Once we have confirmed the amount, you pay with your own UPI app. The UPI ID and QR code are on the last step and on the payment page.' },
 ]
 
 export default function ConsultationRequest() {
@@ -16,7 +16,7 @@ export default function ConsultationRequest() {
       <PageHero
         crumbs={[{ to: '/', label: 'Home' }, { to: '/consultation', label: 'Consultation' }, { label: 'Request' }]}
         title={<>Start a consultation <em>request</em></>}
-        lede="Four short steps. You’ll review everything before anything leaves your browser — and nothing is charged."
+        lede="Four short steps. You’ll review everything before anything leaves your browser. You pay only after our team has confirmed the amount with you."
       />
       <section className="section section--tight">
         <div className="container container--wide request-layout">
