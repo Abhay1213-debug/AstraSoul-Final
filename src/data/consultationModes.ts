@@ -8,8 +8,7 @@ export const consultationModes: ConsultationMode[] = [
     summary: 'Write to your expert at your own pace.',
     howItWorks:
       'Comfortable if you prefer to think before you reply. You exchange written messages with your expert.',
-    pilotNote:
-      'There is no live chat system yet. During the pilot the team will arrange the written conversation with you after confirming your request.',
+    note: 'Our team arranges the written conversation with you once your request is confirmed.',
   },
   {
     id: 'voice',
@@ -17,8 +16,7 @@ export const consultationModes: ConsultationMode[] = [
     icon: 'voice',
     summary: 'Speak directly with your expert.',
     howItWorks: 'A voice call with your expert at a time agreed with you.',
-    pilotNote:
-      'During the pilot, voice calls are coordinated manually (for example via Google Meet). A time is agreed with you after your request is reviewed; instant connection is not offered.',
+    note: 'A time is agreed with you after your request is reviewed. Calls are usually held on Google Meet.',
   },
   {
     id: 'video',
@@ -26,8 +24,7 @@ export const consultationModes: ConsultationMode[] = [
     icon: 'video',
     summary: 'Meet face to face with your expert.',
     howItWorks: 'A video call with your expert at a time agreed with you.',
-    pilotNote:
-      'During the pilot, video calls are coordinated manually (for example via Google Meet). A time is agreed with you after your request is reviewed; availability is not guaranteed.',
+    note: 'A time is agreed with you after your request is reviewed. Video sessions are usually held on Google Meet.',
   },
 ]
 

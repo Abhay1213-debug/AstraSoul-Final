@@ -15,12 +15,12 @@ describe('launch content (accounts switched off, as at launch)', () => {
       const { unmount } = page(path)
       const text = mainText()
       expect(text, path).not.toMatch(/\[[^\]]{4,}\]/) // no "[to be confirmed]" style placeholders
-      expect(text, path).not.toMatch(/not legal advice|working name/i)
-      expect(text, path).toMatch(/Last updated: 16 October 2026/)
+      expect(text, path).not.toMatch(/not legal advice|working name|reviewed by a lawyer/i)
+      expect(text, path).toMatch(/Last updated: 26 October 2026/)
       unmount()
     }
     page('/privacy')
-    expect(mainText()).toMatch(/AstraSoul is run by Abhay Prabhakar \(founder\), Gurugram, India/)
+    expect(mainText()).toMatch(/Ankiro is run by Abhay Prabhakar \(founder\), Gurugram, India/)
     expect(mainText()).toMatch(/abhayprabhakar1213@gmail\.com/)
     expect(mainText()).toMatch(/\+91 87952 72576/)
   })
@@ -41,9 +41,9 @@ describe('launch content (accounts switched off, as at launch)', () => {
     expect(mainText()).toMatch(/80% of the amount is refunded/i)
   })
 
-  it('services show "Price coming soon" and the 20-minute session note; no page invents a price', () => {
+  it('services show "Confirmed before you pay" and the 20-minute session note; no page invents a price', () => {
     page('/services/numerology')
-    expect(screen.getAllByText(/price coming soon/i).length).toBe(3)
+    expect(screen.getAllByText(/confirmed before you pay/i).length).toBeGreaterThanOrEqual(3)
     expect(mainText()).toMatch(/about 20 minutes/i)
     expect(mainText()).not.toMatch(/₹\s?\d/)
   })

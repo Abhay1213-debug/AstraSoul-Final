@@ -162,7 +162,7 @@ export function createSupabaseAuthService(client: SupabaseClient, options: { red
 
     async enrollTotp() {
       try {
-        const { data, error } = await client.auth.mfa.enroll({ factorType: 'totp', friendlyName: `astrasoul-${Date.now()}` })
+        const { data, error } = await client.auth.mfa.enroll({ factorType: 'totp', friendlyName: `ankiro-${Date.now()}` })
         if (error) return fail(mapError(error))
         return { ok: true, data: { factorId: data.id, qrCode: data.totp.qr_code, secret: data.totp.secret } }
       } catch (err) {

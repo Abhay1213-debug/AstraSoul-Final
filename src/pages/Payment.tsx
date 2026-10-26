@@ -13,12 +13,12 @@ export default function Payment() {
       <section className="section">
         <div className="container container--narrow stack">
           <Notice tone="warn" role="status">
-            <p><strong>Please pay only after our team has confirmed the amount with you.</strong> Prices are coming soon. If you pay before we have agreed the details, please contact us first.</p>
+            <p><strong>Please pay only after our team has confirmed the amount with you.</strong> If you pay before we have agreed the details, please contact us first.</p>
           </Notice>
           <ol className="stack">
             <li>Send your consultation request. Our team replies and confirms the service, the mode and the amount.</li>
             <li>Pay that exact amount using the UPI ID or QR code below, in any UPI app.</li>
-            <li>Send us the UPI reference (transaction ID), the name shown in your app and the date, on WhatsApp or email. We check it against our bank record by hand.</li>
+            <li>Send us the UPI reference (transaction ID), the name shown in your app and the date, on WhatsApp or email. We check it against our bank record.</li>
             <li>Our team connects the right expert to you and agrees a time. {consultationInfo.line}</li>
           </ol>
           <SectionHead title="Where to pay" />

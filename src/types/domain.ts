@@ -33,7 +33,7 @@ export interface ConsultationMode {
   icon: 'chat' | 'voice' | 'video'
   summary: string
   howItWorks: string
-  pilotNote: string
+  note: string
 }
 
 // ---- Customers ----------------------------------------------------------------------------
@@ -58,8 +58,6 @@ export interface Expert {
   languages: string[] // empty = not yet known
   modes: ConsultationModeId[]
   availability: string
-  /** True for every profile until genuine expert information is supplied. */
-  isDemonstration: boolean
 }
 
 // ---- Bookings & payments (kept separate on purpose) ---------------------------------------
@@ -84,7 +82,7 @@ export interface Booking {
   concern: string
   status: BookingStatus
   scheduledAt?: string
-  meetingLink?: string // pilot: manually supplied Google Meet link
+  meetingLink?: string // manually supplied Google Meet link
   createdAt: string
   updatedAt: string
 }

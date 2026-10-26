@@ -114,7 +114,7 @@ export function PaymentPanel({
         <>
           {priceMinor === null ? (
             <Notice tone="warn" role="status">
-              <p><strong>The price for this consultation is coming soon.</strong> You can’t submit a payment reference until it is set. We’ll update this page, and there is nothing you need to pay yet.</p>
+              <p><strong>The price for this consultation hasn’t been confirmed yet.</strong> You can’t submit a payment reference until it is set. We’ll update this page, and there is nothing you need to pay yet.</p>
             </Notice>
           ) : !configured ? (
             <Notice tone="warn" role="status">

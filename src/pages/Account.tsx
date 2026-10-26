@@ -1,50 +1,37 @@
-import { CalendarClock, History, UserRound } from 'lucide-react'
 import { useState } from 'react'
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { ForgotPasswordForm, LoginForm, ResetPasswordForm, SignupForm } from '../components/AuthForms'
 import { ProfileCard } from '../components/ProfileCard'
 import { RequestRow, dashboardUpdates } from '../components/RequestParts'
 import { siteConfig } from '../config/site'
-import { ButtonLink, Notice, PageHero, StatusBadge } from '../components/ui'
-import { featureStatus } from '../config/site'
+import { ButtonLink, Notice, PageHero } from '../components/ui'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { useLoad } from '../hooks/useLoad'
 import { firstName, safeNext as safeNextFrom, useAuth } from '../lib/auth'
 import { dataErrorMessage, useData } from '../lib/data'
 
-const planned = [
-  { icon: UserRound, t: 'Profile & saved details', d: 'Save your details once so you don’t re-enter them for each request.' },
-  { icon: CalendarClock, t: 'Consultation requests & status', d: 'See whether a request is submitted, awaiting confirmation, confirmed, completed or cancelled.' },
-  { icon: History, t: 'Consultation history', d: 'Look back at past consultations and request another.' },
-]
-
-const unavailableCopy = {
-  login: { title: 'Log in', doing: 'Logging in' },
-  signup: { title: 'Create an account', doing: 'Registration' },
-  reset: { title: 'Reset your password', doing: 'Password reset' },
-} as const
-
-export function AuthUnavailable({ mode }: { mode: 'login' | 'signup' | 'reset' }) {
-  const copy = unavailableCopy[mode]
-  usePageTitle(mode === 'signup' ? 'Sign up' : copy.title)
+/** Shown where an account page would be while customer accounts are not switched on. Nobody needs an account to use the site. */
+function NoAccountNeeded({ title }: { title: string }) {
+  usePageTitle(title)
   return (
     <>
-      <PageHero eyebrow="Your account" title={copy.title} lede="Customer accounts are the next stage of development." />
+      <PageHero eyebrow="Your account" title="You don’t need an account" lede="Send your request to our team directly. We reply to everyone personally." />
       <section className="section">
         <div className="container container--narrow stack">
-          <Notice tone="warn" role="status">
-            <p><strong>{copy.doing} isn’t available yet.</strong> Accounts need secure authentication and a database, which are not connected in this version. We haven’t built a fake form, because nothing you typed could be saved or kept safe.</p>
-          </Notice>
-          <StatusBadge status={featureStatus.accounts} />
-          <p>In the meantime you can try the free insight or prepare a consultation request without an account.</p>
+          <p>Prepare your consultation request on this website and send it to us on WhatsApp or by email. Our team confirms the amount and the time with you, and you pay by UPI once that is agreed.</p>
           <div className="cluster">
-            <ButtonLink to="/free-insight" variant="ghost">Free insight</ButtonLink>
             <ButtonLink to="/consultation/request" arrow>Start a consultation request</ButtonLink>
+            <ButtonLink to="/free-insight" variant="ghost">Free insight</ButtonLink>
+            <ButtonLink to="/contact" variant="ghost">Contact us</ButtonLink>
           </div>
         </div>
       </section>
     </>
   )
+}
+
+export function AuthUnavailable({ mode }: { mode: 'login' | 'signup' | 'reset' }) {
+  return <NoAccountNeeded title={mode === 'signup' ? 'Sign up' : mode === 'login' ? 'Log in' : 'Reset your password'} />
 }
 
 function CheckingAccount({ title }: { title: string }) {
@@ -161,34 +148,7 @@ export function ResetPassword() {
 }
 
 function DashboardUnavailable() {
-  usePageTitle('Dashboard')
-  return (
-    <>
-      <PageHero eyebrow="Customer dashboard" title="Your dashboard" lede="This is what your dashboard will contain once accounts are available.">
-        <StatusBadge status={featureStatus.dashboard} />
-      </PageHero>
-      <section className="section">
-        <div className="container stack">
-          <Notice tone="warn" role="status">
-            <p><strong>The dashboard isn’t available yet.</strong> There is no login, so there are no requests, bookings or reports to show, and we don’t display sample data as if it were yours. Below is what is planned.</p>
-          </Notice>
-          <div className="grid grid--2">
-            {planned.map(({ icon: Icon, t, d }) => (
-              <div className="card card--flat" key={t}>
-                <span className="card__icon"><Icon size={24} strokeWidth={1.6} aria-hidden="true" /></span>
-                <h3>{t}</h3>
-                <p>{d}</p>
-                <div className="card__foot"><span className="badge badge--planned">Planned</span></div>
-              </div>
-            ))}
-          </div>
-          <div className="cluster">
-            <ButtonLink to="/consultation/request" arrow>Start a consultation request</ButtonLink>
-          </div>
-        </div>
-      </section>
-    </>
-  )
+  return <NoAccountNeeded title="Dashboard" />
 }
 
 function SignedInDashboard({ fullName, email, onSignOut }: { fullName: string; email: string; onSignOut: () => Promise<void> }) {

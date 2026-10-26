@@ -7,8 +7,7 @@ import { ModeCards } from '../components/ModeCards'
 import { HeroPhoto } from '../components/photo'
 import { MoolankCalculator } from '../components/MoolankCalculator'
 import { ServiceCard } from '../components/ServiceCard'
-import { ButtonLink, Notice, Reveal, SectionHead, StatusBadge, TextLink } from '../components/ui'
-import { featureStatus, siteConfig } from '../config/site'
+import { ButtonLink, Reveal, SectionHead, TextLink } from '../components/ui'
 import { services } from '../data/services'
 import { usePageTitle } from '../hooks/usePageTitle'
 
@@ -21,7 +20,7 @@ const journey = [
 
 const principles = [
   { t: 'People, not software', d: 'Gemstone recommendations, palmistry conclusions and personalised remedies come from human experts. Software only does one simple, introductory thing: your Moolank.' },
-  { t: 'Honest about what’s real', d: 'We’re an early pilot. Every page says what is live, what is arranged by hand, and what is still being built.' },
+  { t: 'Clear from the start', d: 'Every page tells you what to expect, what we need from you and how your session is arranged, so there are no surprises.' },
   { t: 'Private by default', d: 'We ask only for what a service needs, and explain why. Your free insight is calculated in your browser, not sent to us.' },
 ]
 
@@ -42,7 +41,7 @@ export default function Home() {
         </div>
         <div className="container container--wide hero__inner">
           <div className="hero__copy">
-            <span className="eyebrow hero__rise" style={{ '--i': 0 } as React.CSSProperties}>Personalized spiritual guidance</span>
+            <span className="eyebrow hero__rise" style={{ '--i': 0 } as React.CSSProperties}>Personalised spiritual guidance</span>
             <h1>
               <span className="hero__rise" style={{ '--i': 1 } as React.CSSProperties}>Your questions.</span>
               <span className="hero__rise" style={{ '--i': 2 } as React.CSSProperties}><em>Deeper answers.</em></span>
@@ -122,7 +121,7 @@ export default function Home() {
         <Rings className="rings-bg" />
         <div className="container split split--wide-left">
           <div className="stack">
-            <span className="eyebrow">Free introductory insight <StatusBadge status={featureStatus.moolankCalculator} /></span>
+            <span className="eyebrow">Free introductory insight</span>
             <h2 id="insight-h">Discover your <em>Moolank</em></h2>
             <p className="lede">Your Moolank is your “root number”, taken from the day of the month you were born. Enter your date of birth to see yours and exactly how it was worked out.</p>
             <p style={{ color: '#dccdb4' }}>It is a traditional starting point for reflection — a small, free taste of numerology. A human expert goes much further.</p>
@@ -134,15 +133,15 @@ export default function Home() {
 
       <section className="section" aria-labelledby="journey-h">
         <div className="container">
-          <SectionHead eyebrow="How it works" title={<span id="journey-h">A simple, <em>honest</em> journey</span>} lede="We are an early pilot. Here is the path today — and the pages explain which parts are manual." />
+          <SectionHead eyebrow="How it works" title={<span id="journey-h">A simple, <em>clear</em> journey</span>} lede="From your first question to your session, here is how it works." />
           <Journey steps={journey} />
-          <p style={{ marginTop: 'var(--space-7)' }}><TextLink to="/how-it-works">See what’s available today</TextLink></p>
+          <p style={{ marginTop: 'var(--space-7)' }}><TextLink to="/how-it-works">See the full process</TextLink></p>
         </div>
       </section>
 
       <section className="section section--plum" aria-labelledby="modes-h">
         <div className="container container--wide">
-          <SectionHead split eyebrow="Consultation options" title={<span id="modes-h">Consult the way that <em>suits you</em></span>} lede="Three ways to speak with an expert. During the pilot, times are arranged manually with you — we don’t promise instant connection." />
+          <SectionHead split eyebrow="Consultation options" title={<span id="modes-h">Consult the way that <em>suits you</em></span>} lede="Three ways to speak with an expert. Our team agrees a time with you personally." />
           <ModeCards />
         </div>
       </section>
@@ -163,9 +162,6 @@ export default function Home() {
               <div className="stage__photo"><HeroPhoto variant="portrait" /></div>
             </div>
           </Reveal>
-          <div style={{ marginTop: 'var(--space-6)', maxWidth: 780, marginInline: 'auto' }}>
-            <Notice><p><strong>Early pilot.</strong> {siteConfig.brandName} is a personal, hands-on service: our team replies to every request, connects the right expert to you and arranges the session with you. Online accounts are coming soon.</p></Notice>
-          </div>
         </div>
       </section>
     </>

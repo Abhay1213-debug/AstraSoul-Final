@@ -10,7 +10,7 @@ import { GetInTouch } from './GetInTouch'
 describe('contact message and link builders', () => {
   it('the message says who is writing, from which website and which page, and ends ready for the visitor’s question', () => {
     const m = contactMessage({ page: 'Numerology', path: '/services/numerology' })
-    expect(m).toMatch(/^Hello Abhay, I'm connecting with you through the AstraSoul website/)
+    expect(m).toMatch(/^Hello Abhay, I'm connecting with you through the Ankiro website/)
     expect(m).toContain('I was looking at: Numerology, /services/numerology')
     expect(m.endsWith('My question: ')).toBe(true)
     expect(contactMessage()).not.toContain('I was looking at')
@@ -23,7 +23,7 @@ describe('contact message and link builders', () => {
 
   it('email links go to the owner’s address with subject and body encoded', () => {
     const subject = contactSubject({ page: 'Palmistry' })
-    expect(subject).toBe('AstraSoul website: question about Palmistry')
+    expect(subject).toBe('Ankiro website: question about Palmistry')
     const mail = mailtoUrl(subject, 'Line one\nLine two')
     expect(mail).toMatch(/^mailto:abhayprabhakar1213@gmail\.com\?subject=/)
     expect(mail).toContain('body=Line%20one%0ALine%20two')
@@ -45,7 +45,7 @@ describe('<GetInTouch />', () => {
 
   it('opens two options with the number visible, each with a ready-made message naming the website and page', async () => {
     const user = userEvent.setup()
-    document.title = 'Numerology · AstraSoul'
+    document.title = 'Numerology · Ankiro'
     render(<MemoryRouter initialEntries={['/services/numerology']}><GetInTouch /></MemoryRouter>)
     await user.click(screen.getByRole('button', { name: /get in touch/i }))
     const panel = screen.getByRole('dialog', { name: /get in touch/i })
@@ -53,12 +53,12 @@ describe('<GetInTouch />', () => {
     expect(within(panel).getByText('abhayprabhakar1213@gmail.com')).toBeInTheDocument()
     const wa = within(panel).getByRole('link', { name: /whatsapp/i })
     expect(wa.getAttribute('href')).toMatch(/^https:\/\/wa\.me\/918795272576\?text=/)
-    expect(decodeURIComponent(wa.getAttribute('href')!)).toMatch(/connecting with you through the AstraSoul website \(I was looking at: Numerology, \/services\/numerology\)/)
+    expect(decodeURIComponent(wa.getAttribute('href')!)).toMatch(/connecting with you through the Ankiro website \(I was looking at: Numerology, \/services\/numerology\)/)
     expect(wa).toHaveAttribute('target', '_blank')
     expect(wa).toHaveAttribute('rel', expect.stringContaining('noopener'))
     const gm = within(panel).getByRole('link', { name: /gmail/i })
     expect(gm.getAttribute('href')).toMatch(/^https:\/\/mail\.google\.com\/mail\/\?view=cm/)
-    expect(decodeURIComponent(gm.getAttribute('href')!)).toContain('AstraSoul website: question about Numerology')
+    expect(decodeURIComponent(gm.getAttribute('href')!)).toContain('Ankiro website: question about Numerology')
     expect(within(panel).getByRole('link', { name: /another email app/i }).getAttribute('href')).toMatch(/^mailto:abhayprabhakar1213@gmail\.com\?/)
   })
 

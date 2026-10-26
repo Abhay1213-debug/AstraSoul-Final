@@ -78,10 +78,10 @@ describe('honesty guardrails (PROJECT_BRIEF §1)', () => {
     expect(screen.queryAllByRole('article')).toHaveLength(0)
   })
 
-  it('login, signup, password reset and dashboard say they are not available', () => {
+  it('login, signup, password reset and dashboard say no account is needed', () => {
     for (const path of ['/login', '/signup', '/forgot-password', '/reset-password', '/dashboard']) {
       const { unmount } = renderAt(path)
-      expect(screen.getByRole('status')).toHaveTextContent(/isn’t available yet/i)
+      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/you don’t need an account/i)
       unmount()
     }
   })

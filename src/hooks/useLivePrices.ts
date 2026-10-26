@@ -6,8 +6,8 @@ import { useLoad } from './useLoad'
 
 /**
  * The price text for a service and mode. When the database is connected (accounts switched on) it shows the price an administrator
- * set; otherwise - or while loading, or if the read fails - it falls back to the website's own placeholder ("Price coming soon").
- * It never invents a price: an unset price is always shown as "Price coming soon".
+ * set; otherwise - or while loading, or if the read fails - it falls back to the website's own wording.
+ * It never invents a price: an unset price is always shown as "Confirmed before you pay".
  */
 export function useLivePrices(): (slug: ServiceSlug, mode: ConsultationModeId) => string {
   const { service } = useData()

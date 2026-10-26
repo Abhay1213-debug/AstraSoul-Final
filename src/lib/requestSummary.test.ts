@@ -21,10 +21,10 @@ describe('buildRequestSummary', () => {
     expect(text).toMatch(/Not a confirmed booking/i)
     expect(text).toMatch(/no payment has been taken/i)
   })
-  it('includes the key fields and placeholder price', () => {
+  it('includes the key fields and the price wording', () => {
     expect(text).toContain('Service: Palmistry')
     expect(text).toContain('Consultation mode: Video consultation')
-    expect(text).toContain('Price coming soon')
+    expect(text).toContain('Confirmed before you pay')
     expect(text).toContain('Asha Rao')
     expect(text).toContain('Palm photographs: to be shared securely')
   })

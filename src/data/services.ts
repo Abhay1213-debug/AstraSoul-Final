@@ -32,14 +32,14 @@ export const services: Service[] = [
     tagline: 'A personal interpretation based on the lines and features of your palms.',
     summary: 'A human expert interprets your palm photographs and discusses what they traditionally signify.',
     whatItIs:
-      'Palmistry interprets the lines, mounts and shape of the hands. Every palmistry conclusion on this platform is made by a human expert — never by software.',
+      'Palmistry interprets the lines, mounts and shape of the hands. Every palmistry conclusion is made by a human expert — never by software.',
     whoItSuits: [
       'You prefer a reading grounded in your own hands rather than a birth date',
       'You would like to talk through themes such as direction, strengths and patterns',
     ],
     whatYouNeed: [
       'Your full name and a short description of your question',
-      'Clear photographs of both palms. Online photo upload is not available yet — the team will tell you how to share them securely once your request is confirmed',
+      'Clear photographs of both palms, which you share securely with our team once your request is confirmed',
     ],
     whatTheExpertDoes: [
       'Studies your palm photographs',

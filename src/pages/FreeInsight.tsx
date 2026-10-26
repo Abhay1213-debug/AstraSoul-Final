@@ -1,6 +1,5 @@
 import { MoolankCalculator } from '../components/MoolankCalculator'
-import { ButtonLink, Notice, PageHero, StatusBadge } from '../components/ui'
-import { featureStatus } from '../config/site'
+import { ButtonLink, Notice, PageHero } from '../components/ui'
 import { usePageTitle } from '../hooks/usePageTitle'
 
 export default function FreeInsight() {
@@ -11,9 +10,7 @@ export default function FreeInsight() {
         eyebrow="Free introductory insight"
         title={<>Discover your <em>Moolank</em></>}
         lede="A simple, free starting point: the root number of your date of birth, with the full working shown."
-      >
-        <StatusBadge status={featureStatus.moolankCalculator} />
-      </PageHero>
+      />
       <section className="section section--paper">
         <div className="container split split--wide-right" style={{ alignItems: 'start' }}>
           <div className="stack">

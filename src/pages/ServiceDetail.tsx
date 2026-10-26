@@ -47,7 +47,7 @@ export default function ServiceDetail() {
               <div>{service.needsPalmPhotos
                 ? <><dt>Palm photographs</dt><dd>Shared securely once confirmed</dd></>
                 : <><dt>Delivered by</dt><dd>A human expert</dd></>}</div>
-              <div><dt>Price</dt><dd>To be confirmed</dd></div>
+              <div><dt>Price</dt><dd>Confirmed before you pay</dd></div>
             </dl>
           </div>
           <div className="arch"><ServiceArt slug={service.slug} /></div>
@@ -71,7 +71,7 @@ export default function ServiceDetail() {
 
       <section className="section section--paper" aria-labelledby="modes-h">
         <div className="container">
-          <SectionHead split eyebrow="Consultation modes & pricing" title={<span id="modes-h">Choose how to <em>consult</em></span>} lede="Prices are coming soon. Each consultation is about 20 minutes, arranged by our team. Nothing is charged on this website." />
+          <SectionHead split eyebrow="Consultation modes & pricing" title={<span id="modes-h">Choose how to <em>consult</em></span>} lede="Each consultation is about 20 minutes, arranged by our team. We confirm the price with you before you pay, and nothing is charged on this website." />
           <div className="price-row grid grid--3">
             {consultationModes.map((m, i) => (
               <Reveal key={m.id} delay={i * 0.08}>
@@ -87,7 +87,7 @@ export default function ServiceDetail() {
               </Reveal>
             ))}
           </div>
-          <p style={{ marginTop: 'var(--space-6)' }}><TextLink to="/consultation">How consultations work during the pilot</TextLink></p>
+          <p style={{ marginTop: 'var(--space-6)' }}><TextLink to="/consultation">How consultations work</TextLink></p>
         </div>
       </section>
 

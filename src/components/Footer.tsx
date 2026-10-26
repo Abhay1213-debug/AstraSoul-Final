@@ -63,7 +63,7 @@ export function Footer() {
           <p>
             Contact: <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a> · WhatsApp {contactChannels.whatsappDisplay}
           </p>
-          <p>© {new Date().getFullYear()} {siteConfig.brandName}. A personal, hands-on service run from Gurugram, India.</p>
+          <p>© {new Date().getFullYear()} {siteConfig.brandName}. Gurugram, India.</p>
         </div>
       </div>
     </footer>

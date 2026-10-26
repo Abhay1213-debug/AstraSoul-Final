@@ -208,7 +208,7 @@ describe('payment reference (manual UPI)', () => {
     const data = world()
     const id = await seedRequest(data, ASHA)
     await mount(`/dashboard/requests/${id}`, data, ASHA, customer(ASHA))
-    expect(await screen.findByText(/price for this consultation is coming soon/i)).toBeInTheDocument()
+    expect(await screen.findByText(/price for this consultation hasn’t been confirmed yet/i)).toBeInTheDocument()
     expect(screen.queryByLabelText(/upi transaction reference/i)).toBeNull()
   })
 
@@ -573,12 +573,12 @@ describe('completeness additions', () => {
     expect(card.getByRole('link', { name: /privacy policy/i })).toHaveAttribute('href', '/privacy')
   })
 
-  it('service pages show the price an administrator set, and "Price coming soon" when none is set', async () => {
+  it('service pages show the price an administrator set, and "Confirmed before you pay" when none is set', async () => {
     const data = world()
     priced(data, 'numerology', 'chat', 49900)
     await mount('/services/numerology', data, null, { id: null })
     expect(await screen.findByText('₹499.00')).toBeInTheDocument()
-    expect(screen.getAllByText(/price coming soon/i).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(/confirmed before you pay/i).length).toBeGreaterThan(0)
   })
 
   it('the experts page never lists experts, even when real experts exist in the database', async () => {

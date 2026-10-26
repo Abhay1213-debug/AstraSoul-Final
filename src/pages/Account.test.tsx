@@ -34,9 +34,9 @@ async function fillSignup(user: ReturnType<typeof userEvent.setup>, over: Partia
 }
 
 describe('accounts switched OFF (the default)', () => {
-  it.each(['/login', '/signup', '/forgot-password', '/reset-password', '/dashboard'])('%s still says it is not available and shows no password field', async (path) => {
+  it.each(['/login', '/signup', '/forgot-password', '/reset-password', '/dashboard'])('%s says no account is needed and shows no password field', async (path) => {
     const { container } = await renderAt(path, null)
-    expect(screen.getByRole('status')).toHaveTextContent(/isn’t available yet/i)
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/you don’t need an account/i)
     expect(container.querySelector('input[type=password]')).toBeNull()
   })
 })
@@ -45,7 +45,7 @@ describe('sign-up', () => {
   it('shows a real form when accounts are switched on', async () => {
     await renderAt('/signup', createFakeAuth())
     expect(screen.getByRole('heading', { level: 1, name: /create an account/i })).toBeInTheDocument()
-    expect(screen.queryByText(/isn’t available yet/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/you don’t need an account/i)).not.toBeInTheDocument()
     expect(screen.getByLabelText(/^password/i)).toHaveAttribute('type', 'password')
     expect(screen.getByLabelText(/^password/i)).toHaveAttribute('autocomplete', 'new-password')
   })

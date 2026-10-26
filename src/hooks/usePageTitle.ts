@@ -3,6 +3,6 @@ import { siteConfig } from '../config/site'
 
 export function usePageTitle(title?: string) {
   useEffect(() => {
-    document.title = title ? `${title} · ${siteConfig.brandName}` : `${siteConfig.brandName} — Personalized Spiritual Guidance`
+    document.title = title ? `${title} · ${siteConfig.brandName}` : `${siteConfig.brandName} — Personalised Spiritual Guidance`
   }, [title])
 }

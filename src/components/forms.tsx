@@ -18,7 +18,7 @@ export function Field({ label, optional, hint, error, children }: FieldProps) {
   return (
     <div className="field">
       <label htmlFor={id}>
-        {label} {optional && <span className="optional">(optional)</span>}
+        {label} {optional && <span className="optional">optional</span>}
       </label>
       {hint && <p className="hint" id={hintId}>{hint}</p>}
       {children({ id, describedBy, invalid: Boolean(error) })}

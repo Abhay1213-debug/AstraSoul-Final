@@ -1,8 +1,16 @@
 import { Link } from 'react-router-dom'
 import { ModeCards } from '../components/ModeCards'
 import { ButtonLink, Notice, PageHero, SectionHead } from '../components/ui'
-import { bookingStatusInfo, paymentStatusInfo } from '../data/consultationModes'
+import { Journey } from '../components/Journey'
+import { consultationInfo } from '../config/site'
 import { usePageTitle } from '../hooks/usePageTitle'
+
+const after = [
+  { t: 'We reply personally', d: 'Our team reads your request and gets back to you on WhatsApp or by email.' },
+  { t: 'We confirm the amount and the time', d: 'We connect the right expert and agree a time with you. You are told the price before you pay.' },
+  { t: 'You pay by UPI', d: 'Once the amount is confirmed, you pay with your own UPI app and send us the reference.' },
+  { t: 'You consult your expert', d: consultationInfo.line },
+]
 
 export default function Consultation() {
   usePageTitle('Consultation options')
@@ -18,32 +26,15 @@ export default function Consultation() {
           <SectionHead title={<span id="modes-h">The three modes</span>} />
           <ModeCards />
           <div style={{ marginTop: 'var(--space-6)' }}>
-            <Notice tone="warn"><p><strong>No instant connection.</strong> Experts are not on call. After you send a request, the team reviews it, chooses an expert and agrees a time with you. Availability isn’t guaranteed.</p></Notice>
+            <Notice><p><strong>Sessions are scheduled.</strong> Experts are not on call. After you send a request, the team reviews it, chooses an expert and agrees a time with you.</p></Notice>
           </div>
         </div>
       </section>
-      <section className="section section--alt" aria-labelledby="status-h">
+      <section className="section section--alt" aria-labelledby="after-h">
         <div className="container">
-          <SectionHead eyebrow="Know where you stand" title={<span id="status-h">What each status means</span>} lede="Booking progress and payment are tracked separately, so one never hides the other." />
-          <div className="grid grid--2">
-            <div className="card card--flat">
-              <h3>Request / booking status</h3>
-              <dl style={{ margin: 0, display: 'grid', gap: 'var(--space-3)' }}>
-                {Object.values(bookingStatusInfo).map((s) => (
-                  <div key={s.label}><dt style={{ fontWeight: 700 }}>{s.label}</dt><dd style={{ margin: 0, color: 'var(--text-muted)' }}>{s.meaning}</dd></div>
-                ))}
-              </dl>
-            </div>
-            <div className="card card--flat">
-              <h3>Payment status</h3>
-              <dl style={{ margin: 0, display: 'grid', gap: 'var(--space-3)' }}>
-                {Object.values(paymentStatusInfo).map((s) => (
-                  <div key={s.label}><dt style={{ fontWeight: 700 }}>{s.label}</dt><dd style={{ margin: 0, color: 'var(--text-muted)' }}>{s.meaning}</dd></div>
-                ))}
-              </dl>
-              <p className="hint" style={{ marginTop: 'var(--space-3)' }}>You pay with your own UPI app after our team confirms the amount. See <Link to="/payment">how payment works</Link>.</p>
-            </div>
-          </div>
+          <SectionHead eyebrow="What happens next" title={<span id="after-h">After you send your request</span>} lede="Our team looks after every step personally." />
+          <Journey steps={after} />
+          <p className="hint" style={{ marginTop: 'var(--space-5)' }}>Payment is by UPI after the amount is confirmed. See <Link to="/payment">how payment works</Link>.</p>
         </div>
       </section>
     </>

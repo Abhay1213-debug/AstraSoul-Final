@@ -1,7 +1,6 @@
 import { ArrowRight, Info, AlertTriangle, AlertCircle, CheckCircle2 } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { Link, type LinkProps } from 'react-router-dom'
-import { statusLabels, type FeatureStatus } from '../config/site'
 import { useReveal } from '../hooks/useReveal'
 import { Rings } from './art'
 
@@ -25,10 +24,6 @@ export function TextLink({ children, ...props }: LinkProps) {
       <ArrowRight size={16} aria-hidden="true" />
     </Link>
   )
-}
-
-export function StatusBadge({ status }: { status: FeatureStatus }) {
-  return <span className={`badge badge--${status}`}>{statusLabels[status]}</span>
 }
 
 type NoticeTone = 'info' | 'warn' | 'danger' | 'success'

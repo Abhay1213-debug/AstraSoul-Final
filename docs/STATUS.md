@@ -77,7 +77,7 @@ Please confirm you hold the rights to publish the photograph; the site only uses
 
 ## Decisions & caveats worth knowing
 
-- **Brand name** defaults to "AstraSoul" purely as a working name taken from the reference site; it is configurable (see README). Not finalised.
+- **Brand name** is **Ankiro** (finalised by the owner, 26 October 2026). It is set in `src/config/site.ts` and can be overridden with `VITE_BRAND_NAME`. The Supabase project and the GitHub/Vercel project names still say AstraSoul; they are internal and not shown to visitors.
 - **Reference site**: inspected (https://astrasoul.lovable.app/). Palette and fonts match it. Its hero photograph was **not** copied; the hero uses an original SVG illustration. Its claims ("1M+ Seekers", "2000+ People Guided", "Trusted Experts") were **deliberately not reproduced**, since the brief forbids unsupported numbers/credentials.
 - **Moolank convention**: day-of-birth reduction (Indian numerology). The traditional themes in `src/data/moolankMeanings.ts` are general and labelled as such; other numerology traditions differ.
 - **Email as a stop-gap** puts the request text (including any DOB the user entered) into a `mailto:` link the user themself sends. It is not a secure channel and is a Phase 1 stop-gap only.

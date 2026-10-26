@@ -1,4 +1,4 @@
-# Putting AstraSoul on the internet (GitHub → Vercel → your domain)
+# Putting Ankiro on the internet (GitHub → Vercel → your domain)
 
 The website folder is ready. The build needs **no secrets** and, in its launch setup, **no environment variables at all**.
 
@@ -16,7 +16,7 @@ git push -u origin main
 ## 2. Vercel
 1. Vercel → **Add New → Project** → pick the GitHub repository.
 2. Leave everything as detected (Framework: Vite). `vercel.json` already contains the page-refresh rule, security headers and caching. **Do not add environment variables for launch.**
-3. **Deploy.** You get an address like `astrasoul-xxxx.vercel.app`. Open it and check: home, a service page, `/payment`, the "Get in touch" button (WhatsApp opens with your number and the message), and a page refresh on `/payment` (must not show a 404).
+3. **Deploy.** You get an address like `ankiro-xxxx.vercel.app`. Open it and check: home, a service page, `/payment`, the "Get in touch" button (WhatsApp opens with your number and the message), and a page refresh on `/payment` (must not show a 404).
 
 **About the free Vercel plan:** as I understand Vercel's terms, the free "Hobby" plan is meant for personal, non-commercial use. A site that takes payments may need the paid plan. Please check their current terms before relying on the free plan; if needed, Cloudflare Pages is a free alternative that allows commercial use (the same folder works there; it needs a one-line redirect file I can add).
 

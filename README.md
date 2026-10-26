@@ -31,7 +31,7 @@ Copy `.env.example` to `.env.local`. Only `VITE_*` variables reach the browser, 
 
 | Variable | Effect |
 | --- | --- |
-| `VITE_BRAND_NAME` | Overrides the brand name (default `AstraSoul`, a *working name* from the reference site) |
+| `VITE_BRAND_NAME` | Overrides the brand name (default `Ankiro`) |
 | `VITE_BRAND_TAGLINE` | Overrides the tagline |
 | `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` | **Public values for the backend.** Sign-up/log-in use them only when `VITE_ACCOUNTS_ENABLED` is also set (below). The two *public* values for the future backend. The client in `src/lib/supabase.ts` refuses to start if given a secret/service-role key. Never put a secret key, database password or `postgres://` URL anywhere in this project |
 | `VITE_ACCOUNTS_ENABLED` | **Off unless exactly `true`.** Switches on customer sign-up and log-in. Keep it empty until the database has been installed and checked; adding the two Supabase values alone does not switch anything on (on purpose). While it is off, the Log in / Sign up / Dashboard pages say plainly that accounts are not available yet. Also switches on, for logged-in customers, online consultation requests, payment-reference submission and (for administrators/experts) the `/admin` and `/staff` areas. |

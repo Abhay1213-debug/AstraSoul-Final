@@ -6,7 +6,7 @@ import { usePageTitle } from '../hooks/usePageTitle'
 import { accountsEnabled } from '../lib/auth/createAuthService'
 
 /** Bump this when the wording changes. */
-const UPDATED = '16 October 2026'
+const UPDATED = '26 October 2026'
 
 function LegalPage({ title, children }: { title: string; children: ReactNode }) {
   usePageTitle(title)
@@ -17,7 +17,6 @@ function LegalPage({ title, children }: { title: string; children: ReactNode }) 
         <div className="container container--narrow legal">
           <p>Last updated: {UPDATED}</p>
           {children}
-          <p className="hint">These pages are written in plain language to describe how this website really works. They have not been reviewed by a lawyer.</p>
         </div>
       </section>
     </>
@@ -69,7 +68,7 @@ export function Privacy() {
       <p>We don’t use advertising or analytics cookies. {accounts && 'If you log in, your browser keeps a sign-in token so you stay logged in; it is removed when you log out.'}</p>
 
       <h2>How long we keep things</h2>
-      <p>We haven’t set fixed retention periods yet. We keep records only for as long as we need them to run the service and for our own accounts. You can ask us at any time what we hold about you, or ask us to correct or delete it.</p>
+      <p>We keep your information only for as long as we need it to run the service and to keep proper records of payments. You can ask us at any time what we hold about you, or ask us to correct or delete it.</p>
 
       <h2>Your choices</h2>
       <p>
@@ -95,12 +94,12 @@ export function Terms() {
       <h2>Requests, experts and sessions</h2>
       <p>
         A request is not a confirmed booking. Our team reads every request, connects the right expert and agrees a time with you. {consultationInfo.line}{' '}
-        Availability is not guaranteed, and there is no instant connection.
+        Availability is not guaranteed, and sessions are scheduled rather than instant.
       </p>
 
       <h2>Prices and payment</h2>
       <p>
-        Prices are coming soon. Our team confirms the amount with you before you pay. You pay in your own UPI app, directly to our account; see <Link to="/payment">how payment works</Link>.
+        Our team confirms the amount with you before you pay. You pay in your own UPI app, directly to our account; see <Link to="/payment">how payment works</Link>.
         A payment counts as received only once our team has checked it against our bank record.
       </p>
 

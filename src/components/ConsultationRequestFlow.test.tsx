@@ -27,7 +27,7 @@ describe('<ConsultationRequestFlow />', () => {
   it('skips to details when a service is preselected via the URL', () => {
     setup('/consultation/request?service=palmistry')
     expect(screen.getByRole('heading', { name: /tell us a little about you/i })).toBeInTheDocument()
-    expect(screen.getByText(/online photo upload is not available yet/i)).toBeInTheDocument()
+    expect(screen.getByText(/we don’t ask for photos here/i)).toBeInTheDocument()
   })
 
   it('ignores an invalid service in the URL', () => {
@@ -54,13 +54,13 @@ describe('<ConsultationRequestFlow />', () => {
     await next(user)
 
     expect(screen.getByRole('heading', { name: /review your request/i })).toBeInTheDocument()
-    expect(screen.getByText(/Price coming soon/)).toBeInTheDocument()
+    expect(screen.getByText(/Confirmed before you pay/)).toBeInTheDocument()
     await next(user) // consent missing
     expect(screen.getByText(/please confirm you understand/i)).toBeInTheDocument()
     await user.click(screen.getByRole('checkbox'))
     await next(user)
 
-    expect(screen.getByRole('heading', { name: /prepared — it has not been sent yet/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /ready — send it to our team/i })).toBeInTheDocument()
     expect(screen.getByText(/Nothing has been submitted, booked or paid/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /copy summary/i })).toBeInTheDocument()
     // Sending is by the visitor's OWN WhatsApp / email app; the site never sends anything itself.

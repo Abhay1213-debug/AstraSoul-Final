@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { formatPrice, getPrice } from '../config/pricing'
 import { siteConfig } from '../config/site'
-import { bookingStatusInfo, consultationModes, isModeId, modeById } from '../data/consultationModes'
+import { consultationModes, isModeId, modeById } from '../data/consultationModes'
 import { isServiceSlug, serviceBySlug, services } from '../data/services'
 import { useLoad } from '../hooks/useLoad'
 import { useAuth } from '../lib/auth'
@@ -173,13 +173,12 @@ export function ConsultationRequestFlow() {
   if (prepared && service && mode) {
     return (
       <div className="panel stack">
-        <h2 ref={headingRef} tabIndex={-1} style={{ outline: 'none' }}>Your request is prepared — it has not been sent yet</h2>
+        <h2 ref={headingRef} tabIndex={-1} style={{ outline: 'none' }}>Your request is ready — send it to our team</h2>
         <Notice tone="warn" role="status">
           <p><strong>Nothing has been submitted, booked or paid.</strong> Your request is only sent when you press send in
           WhatsApp or your email app, and this website does not store your details. To make your request, send the summary below to our team.</p>
         </Notice>
         <dl className="summary">
-          <div><dt>Status</dt><dd>{bookingStatusInfo.draft.label} — {bookingStatusInfo.draft.meaning}</dd></div>
           <div><dt>Service</dt><dd>{service.name}</dd></div>
           <div><dt>Mode</dt><dd>{mode.name}</dd></div>
           <div><dt>Price</dt><dd>{formatPrice(getPrice(service.slug, mode.id))}</dd></div>
@@ -190,8 +189,7 @@ export function ConsultationRequestFlow() {
             <p>Choose WhatsApp or email. Either opens your own app with the request filled in. You review it and press send there. Our team replies personally.</p>
           ) : (
             <Notice tone="warn">
-              <p>Our contact email isn’t set up yet, so there is no address to send this to. You can still copy the summary below
-              and keep it for when it is.</p>
+              <p>We can’t offer an email address to send this to right now. Please copy the summary below and send it to us on WhatsApp.</p>
               {import.meta.env.DEV && <p className="hint">Developer note: set <code>VITE_CONTACT_EMAIL</code> in <code>.env.local</code>.</p>}
             </Notice>
           )}
@@ -230,12 +228,12 @@ export function ConsultationRequestFlow() {
     <div className="panel">
       {data && !signedIn && auth.status !== 'loading' && (
         <Notice role="status">
-          <p><strong>Want to send this online?</strong> <Link to={`/login?next=${encodeURIComponent('/consultation/request')}`}>Log in</Link> or <Link to="/signup">create an account</Link> first. Without an account you can still prepare your request and email it to us.</p>
+          <p><strong>Want to send this online?</strong> <Link to={`/login?next=${encodeURIComponent('/consultation/request')}`}>Log in</Link> or <Link to="/signup">create an account</Link> first. You don’t need an account: you can prepare your request and send it to us.</p>
         </Notice>
       )}
       {data && signedIn && consentLoad.state.status === 'done' && !consentVersion && (
         <Notice tone="warn" role="status">
-          <p><strong>Online requests aren’t open yet.</strong> You can still prepare your request below and send it to us by email. Nothing is stored by this website.</p>
+          <p><strong>Online requests aren’t open yet.</strong> You can still prepare your request below and send it to us. Nothing is stored by this website.</p>
         </Notice>
       )}
       {online && (
@@ -286,7 +284,7 @@ export function ConsultationRequestFlow() {
               {online
                 ? <p>We ask only for what this service needs. Your request is saved to your account so you and our team can follow it. Your name and email come from your account.</p>
                 : <p>We ask only for what this service needs. Your details are used to prepare your consultation request and are not
-                  stored by this website at this stage.</p>}
+                  stored by this website.</p>}
             </Notice>
             <div className="form-grid form-grid--2">
               {!online && <Field label="Full name" error={errors.fullName}>
@@ -314,8 +312,7 @@ export function ConsultationRequestFlow() {
             </div>
             {service.needsPalmPhotos && (
               <Notice>
-                <p><strong>Palm photographs:</strong> online photo upload is not available yet, so we are not asking
-                for photos here. Once your request is confirmed, the team will tell you how to share them securely.</p>
+                <p><strong>Palm photographs:</strong> we don’t ask for photos here. Once your request is confirmed, the team will tell you how to share them securely.</p>
               </Notice>
             )}
             <Field label="What would you like guidance on?" error={errors.concern} hint="A few sentences is plenty. Please don't include passwords or financial details.">
@@ -339,7 +336,7 @@ export function ConsultationRequestFlow() {
                   <span className="choice__body">
                     <span className="choice__title"><ModeIcon icon={m.icon} size={22} />{m.name}</span>
                     <span className="choice__desc">{m.summary}</span>
-                    <span className="choice__desc"><strong>Pilot:</strong> {m.pilotNote}</span>
+                    <span className="choice__desc">{m.note}</span>
                   </span>
                 </label>
               ))}
@@ -355,19 +352,18 @@ export function ConsultationRequestFlow() {
               <div><dt>Mode</dt><dd>{mode.name}</dd></div>
               <div><dt>Price</dt><dd>
                 {online && priceMinor(service.slug, mode.id) !== undefined ? formatMoney(priceMinor(service.slug, mode.id) ?? null) : formatPrice(getPrice(service.slug, mode.id))}{' '}
-                <span className="hint">{online ? '(you pay only after submitting, with your own UPI app)' : '(placeholder — no payment is taken)'}</span></dd></div>
+                <span className="hint">{online ? 'You pay only after submitting, with your own UPI app.' : 'Nothing is charged on this website.'}</span></dd></div>
               <div><dt>Name</dt><dd>{draft.fullName.trim()}</dd></div>
               <div><dt>Email</dt><dd>{draft.email.trim()}</dd></div>
               {draft.phone.trim() && <div><dt>Phone</dt><dd>{draft.phone.trim()}</dd></div>}
               {draft.dateOfBirth && <div><dt>Date of birth</dt><dd>{draft.dateOfBirth}</dd></div>}
               {draft.preferredLanguage.trim() && <div><dt>Language</dt><dd>{draft.preferredLanguage.trim()}</dd></div>}
               <div><dt>Guidance on</dt><dd>{draft.concern.trim()}</dd></div>
-              <div><dt>Status</dt><dd>{online ? 'Not submitted yet' : `${bookingStatusInfo.draft.label} — ${bookingStatusInfo.draft.meaning}`}</dd></div>
             </dl>
             <Notice>
               <p>{online
                 ? 'When you submit, your request is saved and you’ll see your payment steps. A time with an expert is only agreed after our team checks payment and reviews your request; availability is not guaranteed.'
-                : 'The next screen gives you a summary to send to our team by email. A time with an expert is only agreed after the team reviews your request; availability is not guaranteed.'}</p>
+                : 'The next screen gives you a summary to send to our team on WhatsApp or by email. A time with an expert is agreed after the team reviews your request.'}</p>
             </Notice>
             <div className="field">
               <label className="check">

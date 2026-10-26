@@ -173,7 +173,7 @@ function ServicesBody({ service }: { service: DataService }) {
   return (
     <div className="stack">
       <Notice role="status">
-        <p>Prices are in rupees. Leave a price empty if it isn’t decided: customers then see “Price coming soon” and can’t submit a payment. <strong>Consultation length isn’t stored in the database yet</strong>, so it can’t be set here. Service descriptions are part of the website pages.</p>
+        <p>Prices are in rupees. Leave a price empty if it isn’t decided: customers then see “Confirmed before you pay” and can’t submit a payment. <strong>Consultation length isn’t stored in the database yet</strong>, so it can’t be set here. Service descriptions are part of the website pages.</p>
       </Notice>
       {services.state.data.map((s) => (
         <ServiceEditor key={s.slug} s={s} prices={pr.filter((p) => p.serviceSlug === s.slug)} service={service} onSaved={() => { services.reload(); prices.reload() }} />

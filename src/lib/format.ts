@@ -3,7 +3,7 @@ import { modeById, isModeId } from '../data/consultationModes'
 
 /** Amounts are held in paise. null = no price set. */
 export function formatMoney(amountMinor: number | null): string {
-  if (amountMinor === null) return 'Price coming soon'
+  if (amountMinor === null) return 'Confirmed before you pay'
   return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(amountMinor / 100)
 }
 
