@@ -46,7 +46,7 @@ export function MoolankCalculator() {
   const invalid = Boolean(error)
 
   return (
-    <div className="calc">
+    <div className="calc" data-clarity-mask="True">
       <form className="calc__form" onSubmit={onSubmit} noValidate aria-label="Moolank calculator">
         <fieldset className="calc__fieldset" aria-describedby={error ? errId : undefined}>
           <legend>Date of birth</legend>

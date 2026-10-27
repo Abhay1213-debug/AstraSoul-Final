@@ -155,7 +155,7 @@ export function ConsultationRequestFlow() {
   // ---------- Submitted online ----------
   if (createdId && service && mode) {
     return (
-      <div className="panel stack">
+      <div className="panel stack" data-clarity-mask="True">
         <h2 ref={headingRef} tabIndex={-1} style={{ outline: 'none' }}>Your request has been received</h2>
         <Notice tone="success" role="status">
           <p><strong>Thank you.</strong> We have your request for {service.name} ({mode.name}). It is <strong>not a confirmed booking yet</strong>: our team will check payment, then arrange an expert and a time.</p>
@@ -172,7 +172,7 @@ export function ConsultationRequestFlow() {
   // ---------- Prepared (final) screen ----------
   if (prepared && service && mode) {
     return (
-      <div className="panel stack">
+      <div className="panel stack" data-clarity-mask="True">
         <h2 ref={headingRef} tabIndex={-1} style={{ outline: 'none' }}>Your request is ready — send it to our team</h2>
         <Notice tone="warn" role="status">
           <p><strong>Nothing has been submitted, booked or paid.</strong> Your request is only sent when you press send in
@@ -225,7 +225,7 @@ export function ConsultationRequestFlow() {
 
   // ---------- Steps ----------
   return (
-    <div className="panel">
+    <div className="panel" data-clarity-mask="True">
       {data && !signedIn && auth.status !== 'loading' && (
         <Notice role="status">
           <p><strong>Want to send this online?</strong> <Link to={`/login?next=${encodeURIComponent('/consultation/request')}`}>Log in</Link> or <Link to="/signup">create an account</Link> first. You don’t need an account: you can prepare your request and send it to us.</p>

@@ -16,7 +16,7 @@ describe('launch content (accounts switched off, as at launch)', () => {
       const text = mainText()
       expect(text, path).not.toMatch(/\[[^\]]{4,}\]/) // no "[to be confirmed]" style placeholders
       expect(text, path).not.toMatch(/not legal advice|working name|reviewed by a lawyer/i)
-      expect(text, path).toMatch(/Last updated: 26 October 2026/)
+      expect(text, path).toMatch(/Last updated: 27 October 2026/)
       unmount()
     }
     page('/privacy')

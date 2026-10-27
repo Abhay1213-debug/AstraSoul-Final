@@ -6,7 +6,7 @@ import { usePageTitle } from '../hooks/usePageTitle'
 import { accountsEnabled } from '../lib/auth/createAuthService'
 
 /** Bump this when the wording changes. */
-const UPDATED = '26 October 2026'
+const UPDATED = '27 October 2026'
 
 function LegalPage({ title, children }: { title: string; children: ReactNode }) {
   usePageTitle(title)
@@ -41,6 +41,7 @@ export function Privacy() {
       <h2>What we handle, and when</h2>
       <ul>
         <li><strong>Free Moolank insight:</strong> your date of birth is worked out in your browser only. It is not stored or sent to us.</li>
+        <li><strong>How the website is used:</strong> we use an analytics tool, Microsoft Clarity, to see which pages are visited and where visitors tap or scroll, so we can improve the site. See “Cookies and tracking” below.</li>
         <li><strong>Preparing a consultation request:</strong> what you type stays in your browser until you choose to send it. When you send it to us on WhatsApp or by email, we receive what you send, together with your WhatsApp number or email address.</li>
         <li><strong>Messages to us:</strong> anything you write to us on WhatsApp or email, including through the “Get in touch” button. The button only opens your own app with a message ready; nothing is sent until you press send.</li>
         <li><strong>Payments:</strong> you pay in your own UPI app, outside this website. If you tell us the UPI reference, the name shown in your app and the date, we keep them to check the payment. Please never send us a UPI PIN, an OTP, a card number or a banking password.</li>
@@ -60,12 +61,18 @@ export function Privacy() {
       <p>
         When you contact us on WhatsApp or email, those services (Meta and Google) carry your message under their own privacy policies.
         This website is delivered by a hosting provider, which may keep ordinary technical logs of visits.
+        Website usage is measured with Microsoft Clarity, run by Microsoft (see the Microsoft Privacy Statement).
         {accounts && ' Accounts, requests and payments records are stored with our database and sign-in provider (Supabase).'}
         {' '}Consultations are usually held on Google Meet.
       </p>
 
       <h2>Cookies and tracking</h2>
-      <p>We don’t use advertising or analytics cookies. {accounts && 'If you log in, your browser keeps a sign-in token so you stay logged in; it is removed when you log out.'}</p>
+      <p>
+        We don’t use advertising cookies. We do use Microsoft Clarity, a website analytics tool, which sets cookies (named _clck and _clsk) and records how visitors use the pages, such as clicks, scrolling and the pages viewed, so we can see what to improve.
+        The date-of-birth field, the consultation request form and the contact form are hidden from it, so what you type there is not recorded.
+        You can avoid Clarity by blocking cookies or turning on tracking protection in your browser, or by asking us at <Contact />.
+        {accounts && ' If you log in, your browser also keeps a sign-in token so you stay logged in; it is removed when you log out.'}
+      </p>
 
       <h2>How long we keep things</h2>
       <p>We keep your information only for as long as we need it to run the service and to keep proper records of payments. You can ask us at any time what we hold about you, or ask us to correct or delete it.</p>

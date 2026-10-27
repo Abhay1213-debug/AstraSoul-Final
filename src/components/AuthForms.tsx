@@ -71,7 +71,7 @@ export function SignupForm({ service }: { service: AuthService }) {
   }
 
   return (
-    <form onSubmit={submit} noValidate className="form" aria-label="Create an account">
+    <form onSubmit={submit} noValidate className="form" data-clarity-mask="True" aria-label="Create an account">
       {failure && <Notice tone="danger" role="alert"><p>{authErrorMessage[failure]}</p></Notice>}
       <Field label="Full name" error={errors.fullName}>
         {(a) => <input id={a.id} className="input" value={draft.fullName} autoComplete="name" maxLength={80} aria-describedby={a.describedBy} aria-invalid={a.invalid} onChange={(e) => set('fullName', e.target.value)} />}
@@ -129,7 +129,7 @@ export function LoginForm({ service, next }: { service: AuthService; next: strin
   }
 
   return (
-    <form onSubmit={submit} noValidate className="form" aria-label="Log in">
+    <form onSubmit={submit} noValidate className="form" data-clarity-mask="True" aria-label="Log in">
       {failure && <Notice tone="danger" role="alert"><p>{authErrorMessage[failure]}</p></Notice>}
       {failure === 'email_not_confirmed' && <ResendConfirmation service={service} email={normaliseEmail(draft.email)} />}
       <Field label="Email" error={errors.email}>
@@ -194,7 +194,7 @@ export function ForgotPasswordForm({ service }: { service: AuthService }) {
   }
 
   return (
-    <form onSubmit={submit} noValidate className="form" aria-label="Reset your password">
+    <form onSubmit={submit} noValidate className="form" data-clarity-mask="True" aria-label="Reset your password">
       {failure && <Notice tone="danger" role="alert"><p>{authErrorMessage[failure]}</p></Notice>}
       <Field label="Email" error={error} hint="We’ll email you a link to choose a new password.">
         {(a) => <input id={a.id} className="input" type="email" value={email} autoComplete="email" maxLength={320} aria-describedby={a.describedBy} aria-invalid={a.invalid} onChange={(e) => { setEmail(e.target.value); setError(undefined) }} />}
@@ -252,7 +252,7 @@ export function ResetPasswordForm({ service, email }: { service: AuthService; em
   }
 
   return (
-    <form onSubmit={submit} noValidate className="form" aria-label="Choose a new password">
+    <form onSubmit={submit} noValidate className="form" data-clarity-mask="True" aria-label="Choose a new password">
       {failure && (
         <Notice tone="danger" role="alert">
           <p>{authErrorMessage[failure]}{failure === 'session_expired' && <> <Link to="/forgot-password">Ask for a new link</Link>.</>}</p>

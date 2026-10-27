@@ -64,7 +64,7 @@ export default function Contact() {
           {configured && <p className="hint">On a phone or without Gmail? <a href={mailtoUrl(contactSubject(ctx), contactMessage(ctx))}>Use your own email app instead</a>.</p>}
 
           {configured && (
-            <form className="panel form" onSubmit={onSubmit} noValidate aria-label="Write us a message">
+            <form className="panel form" onSubmit={onSubmit} noValidate aria-label="Write us a message" data-clarity-mask="True">
               <h2 style={{ fontSize: 'var(--fs-h3)' }}>Or write a message here</h2>
               <Notice><p>This form opens <strong>your own email app</strong> with your message ready to send. Nothing is sent until you press send there.</p></Notice>
               <div className="form-grid form-grid--2">

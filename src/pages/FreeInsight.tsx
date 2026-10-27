@@ -23,7 +23,7 @@ export default function FreeInsight() {
             <p>For example: born on the 29th → <span className="example-chip">2 + 9 = 11 → 1 + 1 = 2</span></p>
             <p>The month and year are not used. Numbers like 11 and 22 are reduced all the way (to 2 and 4) rather than kept as “master numbers”.</p>
             <Notice>
-              <p><strong>Private by design.</strong> The calculation happens in your browser. Your date of birth is not stored or sent anywhere from this page.</p>
+              <p><strong>Private by design.</strong> The calculation happens in your browser. Your date of birth is not stored or sent anywhere from this page, and it is hidden from our website analytics.</p>
             </Notice>
             <Notice tone="warn">
               <p><strong>Introductory only.</strong> The themes shown are traditional associations offered for reflection. They are not predictions, and they are not the personalised guidance a human expert provides.</p>

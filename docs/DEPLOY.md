@@ -31,3 +31,11 @@ Everything is already built and tested with stand-in data; nothing below has bee
 4. In Vercel add three environment variables, then **Redeploy**: `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` (both public values from your `.env.local`), and `VITE_ACCOUNTS_ENABLED` = `true`.
 5. Sign up on the live site with `abhayprabhakar1213@gmail.com`, confirm the email, open **My dashboard → Account security** and set up an authenticator app, then run `supabase/scripts/71_grant_first_admin_READY.sql` once. `/admin` then asks for your authenticator code.
 6. In **Admin → Services & prices**, set real prices when you decide them. Test with a second address such as `abhayprabhakar1213+test@gmail.com` (a customer; an administrator cannot verify their own payment).
+
+## Website analytics (Microsoft Clarity)
+
+- Project **Ankiro**, ID `z49mhm8v45`. The loader is `public/clarity-init.js` (referenced from `index.html`). It only runs on `ankiro.in` / `www.ankiro.in`, so local and preview visits are not recorded.
+- `vercel.json` allows exactly `https://www.clarity.ms`, `https://scripts.clarity.ms` and the Clarity/Bing endpoints; scripts stay free of `unsafe-inline` and `unsafe-eval` (a test in `src/test/vercelConfig.test.ts` guards this).
+- Private areas carry `data-clarity-mask="True"`: the Moolank calculator, the consultation request flow, the contact form and the account forms. Keep that attribute on any new form that collects personal details.
+- The Privacy Policy (`src/pages/Legal.tsx`) names Clarity and its cookies (`_clck`, `_clsk`). Update it if analytics settings change.
+- In the Clarity dashboard (Settings → Masking) keep masking at **Balanced** or **Strict**, never Relaxed.
