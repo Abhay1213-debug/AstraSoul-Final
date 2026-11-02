@@ -16,7 +16,7 @@ describe('launch content (accounts switched off, as at launch)', () => {
       const text = mainText()
       expect(text, path).not.toMatch(/\[[^\]]{4,}\]/) // no "[to be confirmed]" style placeholders
       expect(text, path).not.toMatch(/not legal advice|working name|reviewed by a lawyer/i)
-      expect(text, path).toMatch(/Last updated: 27 October 2026/)
+      expect(text, path).toMatch(/Last updated: 2 November 2026/)
       unmount()
     }
     page('/privacy')
@@ -25,27 +25,36 @@ describe('launch content (accounts switched off, as at launch)', () => {
     expect(mainText()).toMatch(/\+91 87952 72576/)
   })
 
-  it('the refund policy states exactly the owner’s rule: 80% before an expert is confirmed, nothing after', () => {
+  it('the refund policy states exactly the owner’s rule: 80% if cancelled at least 12 hours before, nothing later', () => {
     page('/refund-policy')
-    expect(mainText()).toMatch(/before an expert has been confirmed.*80% of the amount you paid is refunded/i)
-    expect(mainText()).toMatch(/Once an expert has been confirmed.*no refund is given/i)
+    expect(mainText()).toMatch(/at least 12 hours before your booked time, 80% of the amount you paid is refunded/i)
+    expect(mainText()).toMatch(/less than 12 hours before your booked time, no refund is given/i)
+    expect(mainText()).not.toMatch(/expert (is|has been) confirmed/i)
   })
 
-  it('the payment page shows the owner’s UPI ID and QR code, warns never to share a PIN, and says to pay only after the amount is confirmed', () => {
+  it('the payment page explains paying online through Dodo Payments, the statement name, the PIN warning and the refund rule', () => {
     page('/payment')
-    expect(mainText()).toContain('abhayprabhakar1213@okhdfcbank')
-    expect(mainText()).toContain('Abhay Prabhakar')
-    expect(screen.getByRole('img', { name: /upi qr code for abhay prabhakar/i })).toHaveAttribute('src', '/images/upi-qr.jpg')
-    expect(mainText()).toMatch(/never share your upi pin/i)
-    expect(mainText()).toMatch(/pay only after our team has confirmed the amount/i)
-    expect(mainText()).toMatch(/80% of the amount is refunded/i)
+    expect(mainText()).toMatch(/pay online when you book, by UPI or card/i)
+    expect(mainText()).toMatch(/Dodo Payments/)
+    expect(mainText()).toMatch(/DODOPAY ANKIRO/)
+    expect(mainText()).toMatch(/never ask for your upi pin/i)
+    expect(mainText()).toMatch(/80% of what you paid is refunded if you cancel at least 12 hours before/i)
+    expect(mainText()).not.toMatch(/okhdfcbank/) // the old manual UPI route is gone from the public pages
   })
 
-  it('services show "Confirmed before you pay" and the 20-minute session note; no page invents a price', () => {
+  it('services show their price plus GST, the packages they are in, and the 10-minute voice call', () => {
     page('/services/numerology')
-    expect(screen.getAllByText(/confirmed before you pay/i).length).toBeGreaterThanOrEqual(3)
-    expect(mainText()).toMatch(/about 20 minutes/i)
-    expect(mainText()).not.toMatch(/₹\s?\d/)
+    expect(mainText()).toMatch(/₹499 \+ GST/)
+    expect(mainText()).toMatch(/Palmistry \+ Numerology.*Highly recommended.*₹1,299 \+ GST/)
+    expect(mainText()).toMatch(/Diamond package.*₹2,099 \+ GST/)
+    expect(mainText()).toMatch(/10-minute voice call/i)
+    expect(mainText()).not.toMatch(/price coming soon/i)
+  })
+
+  it('the consultation page lists every price, and a customised plan by message', () => {
+    page('/consultation')
+    for (const p of ['₹499', '₹899', '₹699', '₹299', '₹1,299', '₹1,099', '₹1,499', '₹899', '₹2,099']) expect(mainText()).toContain(`${p} + GST`)
+    expect(screen.getByRole('link', { name: /customised plan/i })).toBeInTheDocument()
   })
 
   it('there are no demonstration experts, no "planned" PDF reports and no dead log-in links on the public pages', () => {

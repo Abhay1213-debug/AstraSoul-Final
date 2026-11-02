@@ -1,4 +1,4 @@
-import { ShieldCheck, Users, Video } from 'lucide-react'
+import { Phone, ShieldCheck, Users } from 'lucide-react'
 import { ButtonLink, PageHero, Reveal, SectionHead } from '../components/ui'
 import { consultationInfo } from '../config/site'
 import { usePageTitle } from '../hooks/usePageTitle'
@@ -9,7 +9,7 @@ import { usePageTitle } from '../hooks/usePageTitle'
  */
 const points = [
   { icon: Users, t: 'We choose for you', d: 'You don’t need to browse or pick anyone. When you send a request, our team connects the right expert for your service and the way you want to consult.' },
-  { icon: Video, t: 'A time agreed with you', d: `Our team agrees a time with you personally. ${consultationInfo.line}` },
+  { icon: Phone, t: 'A call at a time you choose', d: `You pick a free evening slot when you book. ${consultationInfo.line}` },
   { icon: ShieldCheck, t: 'People, not software', d: 'Detailed guidance, remedies and conclusions always come from a human expert, never from the website.' },
 ]
 

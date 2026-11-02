@@ -15,7 +15,7 @@ describe('<Header /> mobile menu', () => {
     await user.click(btn)
     const nav = screen.getByRole('navigation', { name: 'Mobile' })
     expect(btn).toHaveAttribute('aria-expanded', 'true')
-    for (const label of ['Services', 'How it works', 'Experts', 'Consultation', 'Free insight', 'About', 'Contact']) {
+    for (const label of ['Services', 'How it works', 'Free insight', 'About', 'Contact']) {
       expect(nav).toHaveTextContent(label)
     }
     // accounts are not switched on in this test: no "Log in" link that would lead nowhere

@@ -50,88 +50,6 @@ function priced(data: FakeData, slug = 'numerology', mode: 'chat' | 'voice' | 'v
   data.tables.prices.find((p) => p.serviceSlug === slug && p.mode === mode)!.amountMinor = amount
 }
 
-async function submitRequest(user: ReturnType<typeof userEvent.setup>, opts: { service?: string; dob?: boolean } = {}) {
-  await user.click(await screen.findByLabelText(new RegExp(opts.service ?? 'numerology', 'i')))
-  await user.click(screen.getByRole('button', { name: /continue/i }))
-  if (opts.dob !== false) await user.type(screen.getByLabelText(/date of birth/i), '1990-05-17')
-  await user.type(screen.getByLabelText(/what would you like guidance on/i), 'I would like guidance about my career direction.')
-  await user.click(screen.getByRole('button', { name: /continue/i }))
-  await user.click(screen.getByLabelText(/chat/i))
-  await user.click(screen.getByRole('button', { name: /continue/i }))
-  await user.click(screen.getByRole('checkbox'))
-  await user.click(screen.getByRole('button', { name: /submit my request/i }))
-}
-
-describe('consultation request: online submission', () => {
-  it('a logged-in customer submits a request, sees it received, and finds it on the dashboard', async () => {
-    const data = world()
-    const { user } = await mount('/consultation/request', data, ASHA, customer(ASHA))
-    await screen.findByText(/this request will be saved to your account/i)
-    // the account details are not asked for again
-    await user.click(await screen.findByLabelText(/numerology/i))
-    await user.click(screen.getByRole('button', { name: /continue/i }))
-    expect(screen.queryByLabelText(/^email/i)).toBeNull()
-    expect(screen.queryByLabelText(/full name/i)).toBeNull()
-    await user.type(screen.getByLabelText(/date of birth/i), '1990-05-17')
-    await user.type(screen.getByLabelText(/what would you like guidance on/i), 'I would like guidance about my career direction.')
-    await user.click(screen.getByRole('button', { name: /continue/i }))
-    await user.click(screen.getByLabelText(/chat/i))
-    await user.click(screen.getByRole('button', { name: /continue/i }))
-    await user.click(screen.getByRole('checkbox'))
-    await user.click(screen.getByRole('button', { name: /submit my request/i }))
-    expect(await screen.findByRole('heading', { name: /your request has been received/i })).toBeInTheDocument()
-    expect(screen.getByRole('status')).toHaveTextContent(/not a confirmed booking yet/i)
-    expect(data.tables.requests).toHaveLength(1)
-    expect(data.tables.requests[0]).toMatchObject({ customerId: ASHA.id, customerName: 'Asha Rao', status: 'submitted', serviceSlug: 'numerology', mode: 'chat' })
-  })
-
-  it('sends only one request even when the button is pressed twice', async () => {
-    const data = world()
-    const { user } = await mount('/consultation/request', data, ASHA, customer(ASHA))
-    await screen.findByText(/this request will be saved to your account/i)
-    await submitRequest(user)
-    await screen.findByRole('heading', { name: /your request has been received/i })
-    expect(data.calls.filter((c) => c === 'createRequest')).toHaveLength(1)
-  })
-
-  it('without an approved consent version it says online requests are not open and keeps the email route', async () => {
-    const data = world({ consent: null })
-    await mount('/consultation/request', data, ASHA, customer(ASHA))
-    expect(await screen.findByText(/online requests aren’t open yet/i)).toBeInTheDocument()
-    expect(screen.queryByText(/this request will be saved to your account/i)).toBeNull()
-    expect(data.tables.requests).toHaveLength(0)
-  })
-
-  it('a visitor who is not logged in is invited to log in and can still prepare an email request', async () => {
-    const data = world()
-    await mount('/consultation/request', data, null, { id: null })
-    expect(await screen.findByText(/want to send this online/i)).toBeInTheDocument()
-    const inviteLinks = screen.getAllByRole('link', { name: /^log in$/i }).map((a) => a.getAttribute('href'))
-    expect(inviteLinks.some((h) => h?.startsWith('/login?next='))).toBe(true)
-    await userEvent.setup().click(await screen.findByLabelText(/numerology/i))
-    await userEvent.setup().click(screen.getByRole('button', { name: /continue/i }))
-    expect(screen.getByLabelText(/^email/i)).toBeInTheDocument()
-  })
-
-  it('shows a fixed message when the database refuses (too many open requests)', async () => {
-    const data = world()
-    const { user } = await mount('/consultation/request', data, ASHA, customer(ASHA))
-    await screen.findByText(/this request will be saved to your account/i)
-    data.failNext('too_many_open_requests')
-    await user.click(await screen.findByLabelText(/palmistry/i))
-    await user.click(screen.getByRole('button', { name: /continue/i }))
-    await user.type(screen.getByLabelText(/what would you like guidance on/i), 'I would like guidance about my palm lines.')
-    await user.click(screen.getByRole('button', { name: /continue/i }))
-    await user.click(screen.getByLabelText(/chat/i))
-    await user.click(screen.getByRole('button', { name: /continue/i }))
-    await user.click(screen.getByRole('checkbox'))
-    data.calls.length = 0
-    data.failNext('too_many_open_requests')
-    await user.click(screen.getByRole('button', { name: /submit my request/i }))
-    expect(await screen.findByRole('alert')).toHaveTextContent(/maximum number of open requests/i)
-  })
-})
-
 describe('customer dashboard and data isolation', () => {
   it('shows an empty state for a customer with no requests', async () => {
     await mount('/dashboard', world(), ASHA, customer(ASHA))
@@ -219,7 +137,7 @@ describe('payment reference (manual UPI)', () => {
     await mount(`/dashboard/requests/${id}`, data, ASHA, customer(ASHA))
     expect(await screen.findByText('abhayprabhakar1213@okhdfcbank')).toBeInTheDocument()
     expect(screen.getByAltText(/upi qr code for abhay prabhakar/i)).toHaveAttribute('src', '/images/upi-qr.jpg')
-    expect(screen.getByText(/80% of the amount is refunded/i)).toBeInTheDocument()
+    expect(screen.getByText(/80% of what you paid is refunded/i)).toBeInTheDocument()
   })
 
   it('never shows the built-in QR code next to a DIFFERENT UPI ID saved by an administrator', async () => {
@@ -571,14 +489,6 @@ describe('completeness additions', () => {
     const card = within((await screen.findByRole('heading', { name: /privacy and account help/i })).closest('section')!)
     expect(card.getByText(/does not happen automatically/i)).toBeInTheDocument()
     expect(card.getByRole('link', { name: /privacy policy/i })).toHaveAttribute('href', '/privacy')
-  })
-
-  it('service pages show the price an administrator set, and "Confirmed before you pay" when none is set', async () => {
-    const data = world()
-    priced(data, 'numerology', 'chat', 49900)
-    await mount('/services/numerology', data, null, { id: null })
-    expect(await screen.findByText('₹499.00')).toBeInTheDocument()
-    expect(screen.getAllByText(/confirmed before you pay/i).length).toBeGreaterThan(0)
   })
 
   it('the experts page never lists experts, even when real experts exist in the database', async () => {

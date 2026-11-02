@@ -1,12 +1,12 @@
-import { Check } from 'lucide-react'
+import { Check, Phone } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import { ServiceArt } from '../components/art'
-import { ModeIcon } from '../components/icons'
-import { ButtonLink, Notice, Reveal, SectionHead, TextLink } from '../components/ui'
-import { useLivePrices } from '../hooks/useLivePrices'
-import { consultationModes } from '../data/consultationModes'
+import { PackageRows } from '../components/PriceList'
+import { ButtonLink, Reveal, SectionHead, TextLink } from '../components/ui'
+import { consultationInfo, voiceOnly } from '../config/site'
 import { serviceBySlug, services } from '../data/services'
 import { usePageTitle } from '../hooks/usePageTitle'
+import { PACKAGES, priceFor, withGst } from '../shared/booking'
 import NotFound from './NotFound'
 
 function List({ items }: { items: string[] }) {
@@ -23,8 +23,8 @@ export default function ServiceDetail() {
   const { slug = '' } = useParams()
   const service = serviceBySlug(slug)
   usePageTitle(service?.name)
-  const priceText = useLivePrices()
   if (!service) return <NotFound />
+  const price = priceFor([service.slug])
   const others = services.filter((s) => s.slug !== service.slug)
 
   return (
@@ -39,15 +39,15 @@ export default function ServiceDetail() {
             <h1>{service.name}</h1>
             <p className="lede">{service.tagline}</p>
             <div className="cluster" style={{ marginTop: 'var(--space-5)' }}>
-              <ButtonLink to={`/consultation/request?service=${service.slug}`} arrow>Request a {service.name.toLowerCase()} consultation</ButtonLink>
+              <ButtonLink to={`/consultation/request?service=${service.slug}`} arrow>Book a {service.name.toLowerCase()} consultation</ButtonLink>
               {service.slug === 'numerology' && <ButtonLink to="/free-insight" variant="ghost">Try the free Moolank insight</ButtonLink>}
             </div>
             <dl className="glance">
               <div><dt>Date of birth</dt><dd>{service.dob === 'required' ? 'Needed' : service.dob === 'optional' ? 'Optional' : 'Not needed'}</dd></div>
               <div>{service.needsPalmPhotos
-                ? <><dt>Palm photographs</dt><dd>Shared securely once confirmed</dd></>
-                : <><dt>Delivered by</dt><dd>A human expert</dd></>}</div>
-              <div><dt>Price</dt><dd>Confirmed before you pay</dd></div>
+                ? <><dt>Palm photographs</dt><dd>Shared after you book</dd></>
+                : <><dt>Session</dt><dd>{consultationInfo.minutes}-minute voice call</dd></>}</div>
+              <div><dt>Price</dt><dd>{price ? withGst(price) : 'Coming soon'}</dd></div>
             </dl>
           </div>
           <div className="arch"><ServiceArt slug={service.slug} /></div>
@@ -64,30 +64,31 @@ export default function ServiceDetail() {
             <Reveal className="detail-block"><h2>Who it may suit</h2><List items={service.whoItSuits} /></Reveal>
             <Reveal className="detail-block"><h2>What we’ll ask you for</h2><List items={service.whatYouNeed} /></Reveal>
             <Reveal className="detail-block"><h2>What your expert does</h2><List items={service.whatTheExpertDoes} /></Reveal>
-            <Reveal className="detail-block"><Notice tone="warn"><p><strong>Please note:</strong> {service.whatItIsNot}</p></Notice></Reveal>
           </div>
         </div>
       </section>
 
-      <section className="section section--paper" aria-labelledby="modes-h">
+      <section className="section section--paper" aria-labelledby="call-h">
         <div className="container">
-          <SectionHead split eyebrow="Consultation modes & pricing" title={<span id="modes-h">Choose how to <em>consult</em></span>} lede="Each consultation is about 20 minutes, arranged by our team. We confirm the price with you before you pay, and nothing is charged on this website." />
-          <div className="price-row grid grid--3">
-            {consultationModes.map((m, i) => (
-              <Reveal key={m.id} delay={i * 0.08}>
-                <div className="price" style={{ height: '100%' }}>
-                  <span className="card__icon"><ModeIcon icon={m.icon} /></span>
-                  <h3>{m.name}</h3>
-                  <p>{m.summary}</p>
-                  <strong>{priceText(service.slug, m.id)}</strong>
-                  <div className="card__foot">
-                    <ButtonLink to={`/consultation/request?service=${service.slug}&mode=${m.id}`} variant="ghost" small>Choose {m.id}</ButtonLink>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-          <p style={{ marginTop: 'var(--space-6)' }}><TextLink to="/consultation">How consultations work</TextLink></p>
+          <SectionHead split eyebrow="Consultation & price" title={<span id="call-h">A <em>voice call</em> with your expert</span>} lede={consultationInfo.line} />
+          <Reveal>
+            <div className="price price--call">
+              <span className="card__icon"><Phone size={24} strokeWidth={1.6} aria-hidden="true" /></span>
+              <h3>{service.name} on a voice call</h3>
+              <p>{voiceOnly.short}</p>
+              <strong>{price ? withGst(price) : 'Price coming soon'}</strong>
+              <div className="card__foot">
+                <ButtonLink to={`/consultation/request?service=${service.slug}`} small>Book a voice call</ButtonLink>
+              </div>
+            </div>
+          </Reveal>
+          {PACKAGES.some((pk) => pk.services.includes(service.slug)) && (
+            <div className="package-rows">
+              <h3>Or in a package</h3>
+              <PackageRows only={service.slug} />
+            </div>
+          )}
+          <p style={{ marginTop: 'var(--space-6)' }}><TextLink to="/consultation">See all prices, and why we consult by voice only</TextLink></p>
         </div>
       </section>
 

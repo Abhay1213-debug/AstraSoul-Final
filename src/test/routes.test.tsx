@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { createMemoryRouter, matchRoutes, RouterProvider } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
 import { routes } from '../App'
+import { proof } from '../config/site'
 
 const paths = [
   '/', '/about', '/services', '/services/numerology', '/services/palmistry', '/services/gemstone-guidance',
@@ -64,7 +65,8 @@ describe('honesty guardrails (PROJECT_BRIEF §1)', () => {
 
   it.each(paths)('%s makes no invented claims', (path) => {
     const { container } = renderAt(path)
-    const text = container.textContent ?? ''
+    // The owner-supplied figure (config/site.ts) is the only number allowed; any other count still fails.
+    const text = (container.textContent ?? '').replaceAll(`${proof.figure} ${proof.short}`, '').replaceAll(proof.line, '')
     for (const re of forbidden) {
       const m = re.exec(text)
       expect(m ? text.slice(Math.max(0, m.index - 40), m.index + 40) : null, `${path} matched ${re}`).toBeNull()

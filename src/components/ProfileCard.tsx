@@ -50,8 +50,8 @@ export function ProfileCard({ profile, service, onSaved }: { profile: ProfileInf
         <h2 id="profile-heading" style={{ fontSize: 'var(--fs-h3)' }}>Your details</h2>
         {saved && <Notice tone="success" role="status"><p>Your details were saved.</p></Notice>}
         <dl className="summary">
-          <div><dt>Name</dt><dd>{profile.fullName || '—'}</dd></div>
-          <div><dt>Email</dt><dd>{profile.email || '—'}</dd></div>
+          <div><dt>Name</dt><dd>{profile.fullName || 'Not given'}</dd></div>
+          <div><dt>Email</dt><dd>{profile.email || 'Not given'}</dd></div>
           <div><dt>Phone</dt><dd>{profile.phone || 'Not added'}</dd></div>
           <div><dt>Date of birth</dt><dd>{profile.dateOfBirth || 'Not added'}</dd></div>
           <div><dt>Preferred language</dt><dd>{profile.preferredLanguage || 'Not added'}</dd></div>

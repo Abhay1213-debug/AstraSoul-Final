@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom'
 import { Footer } from './Footer'
 import { GetInTouch } from './GetInTouch'
 import { Header } from './Header'
+import { SkyBackdrop } from './SkyBackdrop'
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
@@ -17,12 +18,14 @@ function ScrollToTop() {
 }
 
 export function Layout() {
+  const { pathname } = useLocation()
   return (
     <>
+      <SkyBackdrop />
       <a className="skip-link" href="#main">Skip to main content</a>
       <ScrollToTop />
       <Header />
-      <main id="main" tabIndex={-1}>
+      <main id="main" tabIndex={-1} className={pathname === '/' ? 'is-home' : 'is-inner'}>
         <Outlet />
       </main>
       <Footer />

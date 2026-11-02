@@ -21,7 +21,6 @@ export interface Service {
   whoItSuits: string[]
   whatYouNeed: string[]
   whatTheExpertDoes: string[]
-  whatItIsNot: string
   dob: DobRequirement
   /** Palm photographs are needed, but cannot be collected until secure storage exists (Phase 3/5). */
   needsPalmPhotos: boolean

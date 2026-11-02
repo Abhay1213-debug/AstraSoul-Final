@@ -132,13 +132,13 @@ export function GemstoneArt() {
 
 export function ColorArt() {
   const k = useSvgId('cl')
-  const circles: [number, number, string][] = [[124, 122, '#c17d61'], [196, 122, '#a7ac91'], [124, 194, '#d8b56d'], [196, 194, '#604651']]
+  const circles: [number, number, string][] = [[124, 122, '#d9826b'], [196, 122, '#a9b8a3'], [124, 194, '#f2b03e'], [196, 194, '#232a63']]
   return (
     <svg viewBox="0 0 320 320" aria-hidden="true">
       <defs>
         <radialGradient id={`${k}d`} cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0" stopColor="#fffaf0" />
-          <stop offset="1" stopColor="#f9f4e6" />
+          <stop offset="0" stopColor="#fdfcf8" />
+          <stop offset="1" stopColor="#f6f4ec" />
         </radialGradient>
         {circles.map(([, , c], i) => (
           <radialGradient key={c} id={`${k}c${i}`} cx="0.35" cy="0.3" r="0.8">

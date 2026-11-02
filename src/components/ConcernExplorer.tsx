@@ -12,7 +12,7 @@ import { Rings, ServiceArt } from './art'
 const concerns: { q: string; services: ServiceSlug[]; why: string }[] = [
   { q: 'I want to understand my personality, patterns and decisions', services: ['numerology'], why: 'Numerology looks at the numbers connected to your date of birth and name, and gives you a structured way to reflect on your tendencies.' },
   { q: 'I’d like a reading based on my own hands', services: ['palmistry'], why: 'A palm reading begins with the lines and shape of your hands, so it suits people who prefer something drawn from their own palms.' },
-  { q: 'I’m wondering which gemstone is traditionally associated with me', services: ['gemstone-guidance'], why: 'A human expert explains which stones are traditionally associated with your details, and why — before you consider buying anything.' },
+  { q: 'I’m wondering which gemstone is traditionally associated with me', services: ['gemstone-guidance'], why: 'A human expert explains which stones are traditionally associated with your details, and why, before you consider buying anything.' },
   { q: 'I want more calm and intention in my surroundings and routine', services: ['color-therapy'], why: 'Colour therapy is a gentle, practical reflection on the colours in your space, clothing and day.' },
   { q: 'I’m facing a career or study decision and want another perspective', services: ['numerology', 'palmistry'], why: 'People often explore decisions like this through numerology or palmistry. Neither predicts outcomes; both offer a different lens to think with.' },
 ]
@@ -37,12 +37,12 @@ export function ConcernExplorer() {
       <div className="explorer__list" role="group" aria-label="What’s on your mind?">
         {concerns.map((c, i) => (
           <button key={c.q} type="button" className="explorer__item" aria-pressed={active === i} onClick={() => choose(i)}>
-            <span className="explorer__n" aria-hidden="true">0{i + 1}</span>
+            <span className="explorer__n" aria-hidden="true" />
             <span className="explorer__q">{c.q}</span>
           </button>
         ))}
         <button type="button" className="explorer__item" aria-pressed={contact} onClick={() => choose(concerns.length)}>
-          <span className="explorer__n" aria-hidden="true">06</span>
+          <span className="explorer__n" aria-hidden="true" />
           <span className="explorer__q">My question doesn’t fit any of these</span>
         </button>
       </div>
@@ -76,7 +76,7 @@ export function ConcernExplorer() {
                 )
               })}
             </div>
-            <p className="hint">Suggestions only — your expert can help you decide if another service would suit you better.</p>
+            <p className="hint">Suggestions only: your expert can help you decide if another service would suit you better.</p>
           </>
         )}
       </div>

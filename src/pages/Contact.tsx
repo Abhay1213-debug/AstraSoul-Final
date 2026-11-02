@@ -66,7 +66,7 @@ export default function Contact() {
           {configured && (
             <form className="panel form" onSubmit={onSubmit} noValidate aria-label="Write us a message" data-clarity-mask="True">
               <h2 style={{ fontSize: 'var(--fs-h3)' }}>Or write a message here</h2>
-              <Notice><p>This form opens <strong>your own email app</strong> with your message ready to send. Nothing is sent until you press send there.</p></Notice>
+              <p className="hint" style={{ margin: 0 }}>This opens your own email app with your message ready to send.</p>
               <div className="form-grid form-grid--2">
                 <Field label="Your name" error={errors.name}>
                   {(a) => <input id={a.id} className="input" autoComplete="name" maxLength={80} value={form.name} aria-describedby={a.describedBy} aria-invalid={a.invalid} onChange={(e) => set('name')(e.target.value)} />}

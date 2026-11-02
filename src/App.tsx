@@ -8,6 +8,7 @@ import MyRequest from './pages/MyRequest'
 import Payment from './pages/Payment'
 import Security from './pages/Security'
 import About from './pages/About'
+import BookingStatus from './pages/BookingStatus'
 import Consultation from './pages/Consultation'
 import ConsultationRequest from './pages/ConsultationRequest'
 import Contact from './pages/Contact'
@@ -47,6 +48,7 @@ export const routes: RouteObject[] = [
       { path: '/experts', element: <Experts /> },
       { path: '/consultation', element: <Consultation /> },
       { path: '/consultation/request', element: <ConsultationRequest /> },
+      { path: '/booking/:id', element: <BookingStatus /> },
       { path: '/free-insight', element: <FreeInsight /> },
       // Retired page (astrology is not part of the service offering): send old links to the free insight.
       { path: '/weekly-horoscope', element: <Navigate to="/free-insight" replace /> },

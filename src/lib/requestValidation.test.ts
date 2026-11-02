@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest'
-import { services } from '../data/services'
 import type { ConsultationRequestDraft } from '../types/domain'
 import {
   emptyDraft,
@@ -12,8 +11,6 @@ import {
 } from './requestValidation'
 
 const TODAY = new Date(2026, 5, 15)
-const numerology = services.find((s) => s.slug === 'numerology')!
-const palmistry = services.find((s) => s.slug === 'palmistry')!
 
 const valid: ConsultationRequestDraft = {
   ...emptyDraft,
@@ -36,31 +33,31 @@ describe('isValidEmail', () => {
 
 describe('validateDetailsStep', () => {
   it('passes a complete numerology request', () => {
-    expect(validateDetailsStep(valid, numerology, TODAY)).toEqual({})
+    expect(validateDetailsStep(valid, TODAY)).toEqual({})
   })
   it('flags every missing required field', () => {
-    const errors = validateDetailsStep({ ...emptyDraft, service: 'numerology' }, numerology, TODAY)
+    const errors = validateDetailsStep({ ...emptyDraft, service: 'numerology' }, TODAY)
     expect(Object.keys(errors).sort()).toEqual(['concern', 'dateOfBirth', 'email', 'fullName'])
   })
-  it('requires DOB for numerology but not for palmistry', () => {
+  it('asks every request for a date of birth (details come before the service is chosen)', () => {
     const noDob = { ...valid, dateOfBirth: '' }
-    expect(validateDetailsStep(noDob, numerology, TODAY).dateOfBirth).toBeTruthy()
-    expect(validateDetailsStep({ ...noDob, service: 'palmistry' }, palmistry, TODAY).dateOfBirth).toBeUndefined()
+    expect(validateDetailsStep(noDob, TODAY).dateOfBirth).toBeTruthy()
+    expect(validateDetailsStep({ ...noDob, service: 'palmistry' }, TODAY).dateOfBirth).toBeTruthy()
   })
-  it('validates an optional DOB when supplied', () => {
-    expect(validateDetailsStep({ ...valid, dateOfBirth: '2030-01-01' }, palmistry, TODAY).dateOfBirth).toBeTruthy()
-    expect(validateDetailsStep({ ...valid, dateOfBirth: '2023-02-29' }, palmistry, TODAY).dateOfBirth).toBeTruthy()
+  it('rejects a future or impossible date of birth', () => {
+    expect(validateDetailsStep({ ...valid, dateOfBirth: '2030-01-01' }, TODAY).dateOfBirth).toBeTruthy()
+    expect(validateDetailsStep({ ...valid, dateOfBirth: '2023-02-29' }, TODAY).dateOfBirth).toBeTruthy()
   })
   it('rejects bad phone numbers but allows blank', () => {
-    expect(validateDetailsStep({ ...valid, phone: '' }, numerology, TODAY).phone).toBeUndefined()
-    expect(validateDetailsStep({ ...valid, phone: '+91 98765 43210' }, numerology, TODAY).phone).toBeUndefined()
-    expect(validateDetailsStep({ ...valid, phone: 'abc' }, numerology, TODAY).phone).toBeTruthy()
-    expect(validateDetailsStep({ ...valid, phone: '123' }, numerology, TODAY).phone).toBeTruthy()
+    expect(validateDetailsStep({ ...valid, phone: '' }, TODAY).phone).toBeUndefined()
+    expect(validateDetailsStep({ ...valid, phone: '+91 98765 43210' }, TODAY).phone).toBeUndefined()
+    expect(validateDetailsStep({ ...valid, phone: 'abc' }, TODAY).phone).toBeTruthy()
+    expect(validateDetailsStep({ ...valid, phone: '123' }, TODAY).phone).toBeTruthy()
   })
   it('enforces concern length bounds', () => {
-    expect(validateDetailsStep({ ...valid, concern: 'short' }, numerology, TODAY).concern).toBeTruthy()
-    expect(validateDetailsStep({ ...valid, concern: 'x'.repeat(1001) }, numerology, TODAY).concern).toBeTruthy()
-    expect(validateDetailsStep({ ...valid, concern: '   short   ' }, numerology, TODAY).concern).toBeTruthy()
+    expect(validateDetailsStep({ ...valid, concern: 'short' }, TODAY).concern).toBeTruthy()
+    expect(validateDetailsStep({ ...valid, concern: 'x'.repeat(1001) }, TODAY).concern).toBeTruthy()
+    expect(validateDetailsStep({ ...valid, concern: '   short   ' }, TODAY).concern).toBeTruthy()
   })
 })
 

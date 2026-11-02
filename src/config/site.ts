@@ -8,7 +8,7 @@ const env = import.meta.env
 export const siteConfig = {
   /** The brand name. VITE_BRAND_NAME overrides it without touching code. */
   brandName: (env.VITE_BRAND_NAME as string | undefined)?.trim() || 'Ankiro',
-  tagline: (env.VITE_BRAND_TAGLINE as string | undefined)?.trim() || 'Guidance for a brighter you',
+  tagline: (env.VITE_BRAND_TAGLINE as string | undefined)?.trim() || 'Where your numbers find their voice',
   /** Public contact email (the owner's mailbox until a branded address exists). VITE_CONTACT_EMAIL overrides it; set it to "none" to switch email contact off. */
   contactEmail: (() => {
     const v = ((env.VITE_CONTACT_EMAIL as string | undefined) ?? '').trim()
@@ -23,6 +23,12 @@ export const contactChannels = {
   whatsappDisplay: '+91 87952 72576',
 } as const
 
+/**
+ * The one public number, supplied by the owner (October 2026): how many people Ankiro's experts have guided so far,
+ * counted before Ankiro existed. There are no written testimonials, so nothing beyond this line is claimed.
+ */
+export const proof = { figure: '2,000+', short: 'people guided by our experts', line: 'Our experts have guided more than 2,000 people.' } as const
+
 /** Who operates the site, as given by the owner (used on the legal pages). */
 export const operator = {
   business: 'Ankiro',
@@ -31,10 +37,16 @@ export const operator = {
   place: 'Gurugram, India',
 } as const
 
-/** Session facts supplied by the owner. Sessions are arranged by the team (usually on Google Meet). */
+/** Session facts supplied by the owner. Every consultation is a voice call. */
 export const consultationInfo = {
-  minutes: 20,
-  line: 'Each consultation is about 20 minutes and is arranged by our team, usually on Google Meet.',
+  minutes: 10,
+  line: 'Each consultation is a 10-minute voice call at the time you book. The Diamond package is a 25-minute call.',
+} as const
+
+/** Why consultations are voice only, as the owner explains it: in a chat, typing uses up the session before the answer comes. */
+export const voiceOnly = {
+  why: 'On many apps you consult an expert by chat. Typing back and forth uses up the time, and people often run out of it before they get their answer. That’s why every Ankiro consultation is a voice call.',
+  short: 'Talking gets to the point faster than typing, so your whole session goes to your question.',
 } as const
 
 /** Owner's UPI details (shown on the payment page and the payment step). The QR image is only shown when it matches the UPI ID in use. */
@@ -46,6 +58,8 @@ export const paymentConfig = {
 
 /** Refund rule supplied by the owner. */
 export const refundRule = {
-  beforeConfirmedPercent: 80,
-  line: '80% of the amount is refunded if you cancel before an expert is confirmed. No refund is given once an expert has been confirmed.',
+  percent: 80,
+  hoursBefore: 12,
+  line: '80% of what you paid is refunded if you cancel at least 12 hours before your booked time. If you cancel later than that, no refund is given.',
+  short: 'Cancel at least 12 hours before your time for an 80% refund.',
 } as const

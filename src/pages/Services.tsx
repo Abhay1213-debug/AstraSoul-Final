@@ -38,7 +38,7 @@ export default function Services() {
       </section>
       <section className="section section--paper" aria-labelledby="which-h">
         <div className="container">
-          <SectionHead split eyebrow="Choosing" title={<span id="which-h">Which service fits my <em>concern?</em></span>} lede="Choose the description closest to what’s on your mind. Suggestions only — your expert can help you decide if another service would suit you better." />
+          <SectionHead split eyebrow="Choosing" title={<span id="which-h">Which service fits my <em>concern?</em></span>} lede="Choose the description closest to what’s on your mind. Suggestions only: your expert can help you decide if another service would suit you better." />
           <ConcernExplorer />
           <p style={{ marginTop: 'var(--space-6)' }}><TextLink to="/how-it-works">How the process works</TextLink></p>
         </div>

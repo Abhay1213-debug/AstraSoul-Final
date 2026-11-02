@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
+import { refundRule } from '../config/site'
 import { useLoad } from '../hooks/useLoad'
 import {
   dataErrorMessage, type DataErrorCode, type DataService, type ExpertInfo, type PaymentInfo, type RequestInfo, type RequestStatus,
@@ -91,7 +92,7 @@ function PaymentAdmin({ p, expectedLabel, service, onDone }: { p: PaymentInfo; e
             )}
             {p.status === 'succeeded' && <button type="button" className="btn btn--ghost btn--sm" disabled={pending} onClick={refund}>Mark as refunded</button>}
           </div>
-          {p.status === 'succeeded' && <p className="hint">“Mark as refunded” records that you returned the money yourself. This website doesn’t move money. Policy: 80% is refunded if the customer cancels before an expert is confirmed, nothing after; write the amount you returned in the note.</p>}
+          {p.status === 'succeeded' && <p className="hint">“Mark as refunded” records that you returned the money yourself. This website doesn’t move money. Policy: {refundRule.line} Write the amount you returned in the note.</p>}
         </div>
       )}
     </li>
@@ -193,8 +194,8 @@ export function RequestManage({ id, role, service, backTo }: { id: string; role:
         <div><dt>Customer</dt><dd>{r.customerName}</dd></div>
         {profile.state.status === 'done' && profile.state.data && (
           <>
-            <div><dt>Email</dt><dd>{profile.state.data.email || '—'}</dd></div>
-            <div><dt>Phone</dt><dd>{profile.state.data.phone || '—'}</dd></div>
+            <div><dt>Email</dt><dd>{profile.state.data.email || 'Not given'}</dd></div>
+            <div><dt>Phone</dt><dd>{profile.state.data.phone || 'Not given'}</dd></div>
           </>
         )}
         <div><dt>Requested</dt><dd>{formatDateTime(r.createdAt)}</dd></div>

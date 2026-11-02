@@ -6,7 +6,7 @@ import { usePageTitle } from '../hooks/usePageTitle'
 import { accountsEnabled } from '../lib/auth/createAuthService'
 
 /** Bump this when the wording changes. */
-const UPDATED = '27 October 2026'
+const UPDATED = '2 November 2026'
 
 function LegalPage({ title, children }: { title: string; children: ReactNode }) {
   usePageTitle(title)
@@ -42,13 +42,13 @@ export function Privacy() {
       <ul>
         <li><strong>Free Moolank insight:</strong> your date of birth is worked out in your browser only. It is not stored or sent to us.</li>
         <li><strong>How the website is used:</strong> we use an analytics tool, Microsoft Clarity, to see which pages are visited and where visitors tap or scroll, so we can improve the site. See “Cookies and tracking” below.</li>
-        <li><strong>Preparing a consultation request:</strong> what you type stays in your browser until you choose to send it. When you send it to us on WhatsApp or by email, we receive what you send, together with your WhatsApp number or email address.</li>
+        <li><strong>Booking a consultation:</strong> your name, email address, phone number, date of birth, preferred language, what you would like guidance on, and the consultation and time you choose. We keep these in our booking database so our team and your expert can prepare and hold your session.</li>
         <li><strong>Messages to us:</strong> anything you write to us on WhatsApp or email, including through the “Get in touch” button. The button only opens your own app with a message ready; nothing is sent until you press send.</li>
-        <li><strong>Payments:</strong> you pay in your own UPI app, outside this website. If you tell us the UPI reference, the name shown in your app and the date, we keep them to check the payment. Please never send us a UPI PIN, an OTP, a card number or a banking password.</li>
+        <li><strong>Payments:</strong> you pay on the checkout of Dodo Payments, our payment partner. We receive the payment’s status, amount and reference, never your card or UPI details. Please never send us a UPI PIN, an OTP, a card number or a banking password.</li>
         {accounts && (
           <>
             <li><strong>Your account:</strong> if you create an account we store your name, email address and password (the password is held by our sign-in provider in a protected form and cannot be read by us), plus any phone number, date of birth or language you choose to add.</li>
-            <li><strong>Requests sent online:</strong> the service and mode you chose, what you ask guidance on, any date of birth the service needs, the version of the consent you accepted, and the status of the request. Our team and the expert connected to your request can read it. Other customers cannot.</li>
+            <li><strong>Requests sent online:</strong> the service you chose, what you ask guidance on, any date of birth the service needs, the version of the consent you accepted, and the status of the request. Our team and the expert connected to your request can read it. Other customers cannot.</li>
             <li><strong>Activity records:</strong> we keep a record of changes to requests and payments so we can see what happened.</li>
           </>
         )}
@@ -62,14 +62,15 @@ export function Privacy() {
         When you contact us on WhatsApp or email, those services (Meta and Google) carry your message under their own privacy policies.
         This website is delivered by a hosting provider, which may keep ordinary technical logs of visits.
         Website usage is measured with Microsoft Clarity, run by Microsoft (see the Microsoft Privacy Statement).
-        {accounts && ' Accounts, requests and payments records are stored with our database and sign-in provider (Supabase).'}
-        {' '}Consultations are usually held on Google Meet.
+        {' '}Bookings are stored with our database provider, Supabase{accounts ? ', which also runs sign-in for accounts' : ''}.
+        {' '}Payments are processed by Dodo Payments under its own terms and privacy policy.
+        {' '}Consultations are voice calls on Google Meet, a Google service.
       </p>
 
       <h2>Cookies and tracking</h2>
       <p>
         We don’t use advertising cookies. We do use Microsoft Clarity, a website analytics tool, which sets cookies (named _clck and _clsk) and records how visitors use the pages, such as clicks, scrolling and the pages viewed, so we can see what to improve.
-        The date-of-birth field, the consultation request form and the contact form are hidden from it, so what you type there is not recorded.
+        The date-of-birth field, the booking form and the contact form are hidden from it, so what you type there is not recorded.
         You can avoid Clarity by blocking cookies or turning on tracking protection in your browser, or by asking us at <Contact />.
         {accounts && ' If you log in, your browser also keeps a sign-in token so you stay logged in; it is removed when you log out.'}
       </p>
@@ -98,16 +99,16 @@ export function Terms() {
       <h2>No guaranteed outcomes; not professional advice</h2>
       <p>Guidance is based on traditional practices and is offered for reflection and exploration. We do not promise specific outcomes, and nothing provided is medical, psychological, legal or financial advice. Please seek qualified professionals for those matters. Decisions you make are yours.</p>
 
-      <h2>Requests, experts and sessions</h2>
+      <h2>Bookings and sessions</h2>
       <p>
-        A request is not a confirmed booking. Our team reads every request, connects the right expert and agrees a time with you. {consultationInfo.line}{' '}
-        Availability is not guaranteed, and sessions are scheduled rather than instant.
+        When you book, you choose a free time. Your booking is confirmed once your payment succeeds. {consultationInfo.line}{' '}
+        Our team connects the right expert and sends you the Google Meet link for your call on WhatsApp before your session. If there is a problem with your booked time, contact us and we will sort it out with you.
       </p>
 
       <h2>Prices and payment</h2>
       <p>
-        Our team confirms the amount with you before you pay. You pay in your own UPI app, directly to our account; see <Link to="/payment">how payment works</Link>.
-        A payment counts as received only once our team has checked it against our bank record.
+        Prices are in Indian rupees and are shown before you pay. GST is added to the price on the payment page. You pay online when you book, on the checkout of Dodo Payments, our payment partner; see <Link to="/payment">how payment works</Link>.
+        The payment shows on your statement as DODOPAY ANKIRO.
       </p>
 
       <h2>Refunds</h2>
@@ -128,13 +129,13 @@ export function Terms() {
 export function Refund() {
   return (
     <LegalPage title="Refund Policy">
-      <p>You pay with your own UPI app after our team confirms the amount with you. This website does not take payments itself.</p>
-      <h2>Before an expert is confirmed</h2>
-      <p>If you cancel before an expert has been confirmed for your consultation, {refundRule.beforeConfirmedPercent}% of the amount you paid is refunded.</p>
-      <h2>After an expert is confirmed</h2>
-      <p>Once an expert has been confirmed for your consultation, no refund is given.</p>
+      <p>You pay online when you book, through our payment partner Dodo Payments.</p>
+      <h2>Cancelling {refundRule.hoursBefore} hours or more before your time</h2>
+      <p>If you cancel at least {refundRule.hoursBefore} hours before your booked time, {refundRule.percent}% of the amount you paid is refunded.</p>
+      <h2>Cancelling less than {refundRule.hoursBefore} hours before</h2>
+      <p>If you cancel less than {refundRule.hoursBefore} hours before your booked time, no refund is given.</p>
       <h2>How to ask</h2>
-      <p>Contact us at <Contact /> and tell us the service you booked and the UPI reference of your payment. Once we have verified the cancellation, the refund is sent back by UPI to the account you paid from, and we will let you know when it has been sent.</p>
+      <p>Contact us at <Contact /> and tell us your booking reference. Once we have verified the cancellation, the refund goes back to the UPI account or card you paid with, through Dodo Payments, and we will let you know when it has been sent.</p>
       <h2>If something goes wrong</h2>
       <p>If there is a problem with a confirmed session, please contact us and we will talk to you about it.</p>
     </LegalPage>

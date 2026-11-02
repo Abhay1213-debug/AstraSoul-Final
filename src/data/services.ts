@@ -20,8 +20,6 @@ export const services: Service[] = [
       'Explains what they traditionally indicate in the context of your question',
       'Gives you personalised guidance and suggestions for reflection',
     ],
-    whatItIsNot:
-      'Numerology is offered for reflection and exploration. It does not predict specific outcomes and is not a substitute for medical, legal or financial advice.',
     dob: 'required',
     needsPalmPhotos: false,
   },
@@ -32,23 +30,22 @@ export const services: Service[] = [
     tagline: 'A personal interpretation based on the lines and features of your palms.',
     summary: 'A human expert interprets your palm photographs and discusses what they traditionally signify.',
     whatItIs:
-      'Palmistry interprets the lines, mounts and shape of the hands. Every palmistry conclusion is made by a human expert — never by software.',
+      'Palmistry interprets the lines, mounts and shape of the hands. Every palmistry conclusion is made by a human expert, never by software.',
     whoItSuits: [
       'You prefer a reading grounded in your own hands rather than a birth date',
       'You would like to talk through themes such as direction, strengths and patterns',
     ],
     whatYouNeed: [
       'Your full name and a short description of your question',
-      'Clear photographs of both palms, which you share securely with our team once your request is confirmed',
+      'Your date of birth',
+      'Clear photographs of both palms, which you share with our team after you book',
     ],
     whatTheExpertDoes: [
       'Studies your palm photographs',
       'Shares their interpretation and answers your questions',
       'Explains their conclusions and what they mean for you',
     ],
-    whatItIsNot:
-      'A palm reading is an interpretive tradition, not a diagnosis or a forecast. It does not promise specific outcomes.',
-    dob: 'optional',
+    dob: 'required',
     needsPalmPhotos: true,
   },
   {
@@ -58,7 +55,7 @@ export const services: Service[] = [
     tagline: 'Understand which stones are traditionally associated with you, and why.',
     summary: 'A human expert explains which gemstones are traditionally associated with your details.',
     whatItIs:
-      'Gemstone guidance draws on traditional associations between stones and personal details. Any gemstone recommendation is made by a human expert after discussing your situation with you — not generated automatically.',
+      'Gemstone guidance draws on traditional associations between stones and personal details. Any gemstone recommendation is made by a human expert after discussing your situation with you, not generated automatically.',
     whoItSuits: [
       'You have heard about gemstones and want to understand them before buying anything',
       'You want an expert opinion explained clearly, with reasons',
@@ -69,8 +66,6 @@ export const services: Service[] = [
       'Explains which stones are traditionally associated with you and the reasoning',
       'May ask for additional birth details if their method requires it',
     ],
-    whatItIsNot:
-      'Gemstones are not a medical treatment and no outcome is guaranteed. We do not sell gemstones through this website.',
     dob: 'required',
     needsPalmPhotos: false,
   },
@@ -89,16 +84,14 @@ export const services: Service[] = [
     whatYouNeed: [
       'Your full name',
       'A short description of what you would like to explore',
-      'Your date of birth, if you would like it taken into account (optional)',
+      'Your date of birth',
     ],
     whatTheExpertDoes: [
       'Talks through your situation and preferences',
       'Suggests colours and practical ways to work with them',
       'Sums up their suggestions so you know what to try next',
     ],
-    whatItIsNot:
-      'Colour therapy here is a wellbeing-oriented practice, not a medical or psychological treatment.',
-    dob: 'optional',
+    dob: 'required',
     needsPalmPhotos: false,
   },
 ]

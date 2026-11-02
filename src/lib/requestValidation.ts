@@ -1,4 +1,4 @@
-import type { ConsultationRequestDraft, Service } from '../types/domain'
+import type { ConsultationRequestDraft } from '../types/domain'
 import { parseIsoDate } from './moolank'
 
 export type RequestErrors = Partial<Record<keyof ConsultationRequestDraft, string>>
@@ -25,13 +25,13 @@ export function isValidEmail(value: string): boolean {
   return EMAIL_RE.test(value.trim())
 }
 
-/** Step 1: service chosen. */
+/** Service chosen (on the consultation step). */
 export function validateServiceStep(draft: ConsultationRequestDraft): RequestErrors {
   return draft.service ? {} : { service: 'Please choose a service.' }
 }
 
-/** Step 2: personal details and concern. Needs the chosen service for the DOB rule. */
-export function validateDetailsStep(draft: ConsultationRequestDraft, service: Service, today = new Date()): RequestErrors {
+/** Step 1: personal details and concern. Comes before the service is chosen, so the date of birth is asked of everyone. */
+export function validateDetailsStep(draft: ConsultationRequestDraft, today = new Date()): RequestErrors {
   const errors: RequestErrors = {}
   const name = draft.fullName.trim()
   if (name.length < 2) errors.fullName = 'Please enter your full name.'
@@ -44,10 +44,8 @@ export function validateDetailsStep(draft: ConsultationRequestDraft, service: Se
     errors.phone = 'Enter a valid phone number, or leave this blank.'
   }
 
-  if (service.dob === 'required' || (service.dob === 'optional' && draft.dateOfBirth)) {
-    const parsed = parseIsoDate(draft.dateOfBirth, today)
-    if (!parsed.ok) errors.dateOfBirth = parsed.error
-  }
+  const parsed = parseIsoDate(draft.dateOfBirth, today)
+  if (!parsed.ok) errors.dateOfBirth = parsed.error
 
   const concern = draft.concern.trim()
   if (concern.length < CONCERN_MIN) errors.concern = `Please describe what you would like guidance on (at least ${CONCERN_MIN} characters).`
@@ -57,12 +55,12 @@ export function validateDetailsStep(draft: ConsultationRequestDraft, service: Se
   return errors
 }
 
-/** Step 3: mode chosen. */
+/** Mode chosen (on the consultation step). */
 export function validateModeStep(draft: ConsultationRequestDraft): RequestErrors {
   return draft.mode ? {} : { mode: 'Please choose how you would like to consult.' }
 }
 
-/** Step 4: consent to review before use. */
+/** Step 3: consent to review before use. */
 export function validateReviewStep(draft: ConsultationRequestDraft): RequestErrors {
   return draft.consent ? {} : { consent: 'Please confirm you understand how your details will be used.' }
 }

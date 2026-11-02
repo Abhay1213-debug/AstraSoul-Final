@@ -10,8 +10,14 @@
  */
 export const HERO_SRC = `${import.meta.env.BASE_URL}images/hero-reference.webp`
 export const HERO_ALT =
-  'A woman in profile with her eyes closed and a gentle smile, her face lit by warm golden light and framed by a thin golden halo and fine celestial geometry, beside a crescent moon against a deep chocolate-brown sky. Text in the image reads: Same sky. A brighter you.'
+  'A woman in profile with her eyes closed and a gentle smile, her face lit by warm golden light and framed by a thin golden halo and fine celestial geometry, beside a crescent moon against a deep chocolate-brown sky.'
 export const HERO_SIZE = { width: 1504, height: 632 } as const
+
+/** The figure (alpha cutout keyed from a green-screen render) and the night-sky plate she is composited into. The supplied reference photograph is never modified. */
+export const HERO_FIGURE_SRC = `${import.meta.env.BASE_URL}images/hero-figure.webp`
+export const HERO_FIGURE_SIZE = { width: 1800, height: 1344 } as const
+export const HERO_SKY_SRC = `${import.meta.env.BASE_URL}images/hero-sky.webp`
+export const HERO_SKY_SIZE = { width: 1611, height: 2000 } as const
 
 export function HeroPhoto({ variant, priority = false, className = '' }: { variant: 'hero' | 'portrait' | 'full'; priority?: boolean; className?: string }) {
   return (

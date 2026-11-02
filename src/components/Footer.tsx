@@ -1,28 +1,30 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
 import { contactChannels, siteConfig } from '../config/site'
 import { services } from '../data/services'
 import { Rings } from './art'
-import { Logo } from './Logo'
+import { LogoLockup } from './Logo'
 import { ButtonLink } from './ui'
 
 export function Footer() {
   const accountsOn = useAuth().state.status !== 'unavailable'
+  // The home page already ends on its own ask, so the footer does not repeat one there.
+  const home = useLocation().pathname === '/'
   return (
     <footer className="site-footer">
       <Rings className="footer-rings" />
       <div className="container">
-        <div className="footer-top">
+        {!home && <div className="footer-top">
           <p className="footer-statement">Guidance from <em>people</em>, explained with care.</p>
           <div className="cluster">
             <ButtonLink to="/consultation/request" arrow>Start a consultation request</ButtonLink>
             <ButtonLink to="/free-insight" variant="ghost">Free insight</ButtonLink>
           </div>
-        </div>
+        </div>}
         <div className="footer-grid">
           <div className="footer-brand">
-            <Logo />
-            <p>Personalised spiritual guidance from human experts, with a simple free introductory tool.</p>
+            <Link to="/" className="footer-lockup" aria-label={`${siteConfig.brandName}, home`}><LogoLockup tone="dark" /></Link>
+            <p>Personalised guidance from human experts, on a voice call.</p>
           </div>
           <nav aria-label="Services">
             <h2>Services</h2>
@@ -37,8 +39,8 @@ export function Footer() {
             <ul>
               <li><Link to="/how-it-works">How it works</Link></li>
               <li><Link to="/experts">Experts</Link></li>
-              <li><Link to="/consultation">Consultation options</Link></li>
-              <li><Link to="/free-insight">Free introductory insight</Link></li>
+              <li><Link to="/consultation">Voice consultations</Link></li>
+              <li><Link to="/free-insight">Free Moolank insight</Link></li>
               <li><Link to="/about">About</Link></li>
               <li><Link to="/payment">How payment works</Link></li>
               <li><Link to="/contact">Contact</Link></li>
@@ -56,10 +58,6 @@ export function Footer() {
           </nav>
         </div>
         <div className="footer-note">
-          <p>
-            Guidance on this site is offered for reflection and exploration. It does not promise specific outcomes and is not
-            medical, legal or financial advice. Detailed recommendations come from human experts, not from software.
-          </p>
           <p>
             Contact: <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a> · WhatsApp {contactChannels.whatsappDisplay}
           </p>

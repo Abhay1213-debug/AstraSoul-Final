@@ -1,30 +1,34 @@
 import type { BookingStatus, ConsultationMode, ConsultationModeId, PaymentStatus } from '../types/domain'
 
+/**
+ * Staff screens only: requests made before consultations became voice-only may still say chat or video, and these
+ * names label them. The public site offers voice calls only (see src/shared/booking.ts).
+ */
+
 export const consultationModes: ConsultationMode[] = [
   {
     id: 'chat',
     name: 'Chat consultation',
     icon: 'chat',
     summary: 'Write to your expert at your own pace.',
-    howItWorks:
-      'Comfortable if you prefer to think before you reply. You exchange written messages with your expert.',
-    note: 'Our team arranges the written conversation with you once your request is confirmed.',
+    howItWorks: 'Written messages, for when you prefer to think before you reply.',
+    note: 'At the time you book.',
   },
   {
     id: 'voice',
     name: 'Voice consultation',
     icon: 'voice',
     summary: 'Speak directly with your expert.',
-    howItWorks: 'A voice call with your expert at a time agreed with you.',
-    note: 'A time is agreed with you after your request is reviewed. Calls are usually held on Google Meet.',
+    howItWorks: 'A call at the time you book.',
+    note: 'Usually on Google Meet.',
   },
   {
     id: 'video',
     name: 'Video consultation',
     icon: 'video',
     summary: 'Meet face to face with your expert.',
-    howItWorks: 'A video call with your expert at a time agreed with you.',
-    note: 'A time is agreed with you after your request is reviewed. Video sessions are usually held on Google Meet.',
+    howItWorks: 'A video call at the time you book.',
+    note: 'Usually on Google Meet.',
   },
 ]
 

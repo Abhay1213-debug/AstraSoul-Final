@@ -10,8 +10,6 @@ import { ButtonLink } from './ui'
 export const primaryNav = [
   { to: '/services', label: 'Services' },
   { to: '/how-it-works', label: 'How it works' },
-  { to: '/experts', label: 'Experts' },
-  { to: '/consultation', label: 'Consultation' },
   { to: '/free-insight', label: 'Free insight' },
   { to: '/about', label: 'About' },
   { to: '/contact', label: 'Contact' },
@@ -21,6 +19,7 @@ export function Header() {
   const [open, setOpen] = useState(false)
   const { pathname } = useLocation()
   const scrolled = useScrolled()
+  const pastHero = useScrolled(400)
   const authStatus = useAuth().state.status
   const signedIn = authStatus === 'signed_in'
   const accountsOn = authStatus !== 'unavailable'
@@ -28,6 +27,9 @@ export function Header() {
   const roleLink = role.status === 'admin' ? { to: '/admin', label: 'Admin' } : role.status === 'staff' ? { to: '/staff', label: 'My requests' } : null
   // On the home page the header floats transparently over the dark hero until the page scrolls.
   const floating = pathname === '/' && !scrolled && !open
+  // On phones the button lives in a bar at the bottom of the screen (the top bar is too narrow for it). Not on the request
+  // page itself, and on the home page only once the hero, which has its own button, has scrolled away.
+  const dock = pathname !== '/consultation/request' && (pathname !== '/' || pastHero) && !open
 
   useEffect(() => setOpen(false), [pathname])
   useEffect(() => {
@@ -56,7 +58,7 @@ export function Header() {
             {signedIn
               ? <NavLink to="/dashboard" className="btn btn--ghost btn--sm">My dashboard</NavLink>
               : accountsOn && <NavLink to="/login" className="btn btn--ghost btn--sm">Log in</NavLink>}
-            <ButtonLink to="/consultation/request" small>Start a request</ButtonLink>
+            <ButtonLink to="/consultation/request" small className="header-cta">Start a consultation request</ButtonLink>
           </div>
           <button
             type="button"
@@ -80,6 +82,11 @@ export function Header() {
           {signedIn ? <NavLink to="/dashboard">My dashboard</NavLink> : accountsOn && <NavLink to="/login">Log in</NavLink>}
           <ButtonLink to="/consultation/request">Start a consultation request</ButtonLink>
         </nav>
+      )}
+      {dock && (
+        <div className="cta-dock">
+          <ButtonLink to="/consultation/request">Start a consultation request</ButtonLink>
+        </div>
       )}
     </>
   )
