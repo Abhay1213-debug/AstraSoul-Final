@@ -46,6 +46,8 @@ create table public.bookings (
 );
 alter table public.bookings enable row level security;
 revoke all on table public.bookings from anon, authenticated;
+-- the website's server (secret key = service_role) needs these explicitly: Supabase no longer grants them on new tables
+grant select, insert, update on table public.bookings to service_role;
 comment on table public.bookings is 'ankiro:bookings';
 
 -- no two live bookings (held while paying, or paid) may overlap in time; test and real bookings are kept apart

@@ -22,6 +22,10 @@ describe('bookings table SQL', () => {
     expect(code).not.toMatch(/grant [^;]* to (anon|authenticated|public)\b/)
     expect(code).not.toMatch(/create policy/)
   })
+  it("lets the website's server (service_role) read, add and update bookings, and nothing more", () => {
+    expect(code).toContain('grant select, insert, update on table public.bookings to service_role')
+    expect(code).not.toMatch(/grant [^;]*delete[^;]* to service_role/)
+  })
   it('refuses overlapping held or paid bookings, so a 25-minute session also blocks the next slot (test bookings never block real ones)', () => {
     expect(code).toContain("exclude using gist (tsrange(starts_at, ends_at) with &&) where (status in ('held', 'paid') and not test)")
     expect(code).toContain("exclude using gist (tsrange(starts_at, ends_at) with &&) where (status in ('held', 'paid') and test)")
